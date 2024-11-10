@@ -1,4 +1,4 @@
-#VIDEO ARRIVATO A 3:31:00
+#VIDEO ARRIVATO A 3:31:00 ma guarda animazioni corrette a 5:04:00
 
 '''
 ====================================================================================
