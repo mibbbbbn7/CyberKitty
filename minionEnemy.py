@@ -31,9 +31,6 @@ class Minion(pygame.sprite.Sprite):
         self.rect.center += self.direction * self.speed * delta_t
         
 
-
-
-
     def hit(self):
         self.health -= 1
         if self.health == 0:

@@ -17,7 +17,6 @@ class Bullet_heart (pygame.sprite.Sprite):
         self.creation_time = pygame.time.get_ticks()
         self.mask = pygame.mask.from_surface(self.image)
         self.speed = 900
-        self.rotation = 0
 
     def update(self, delta_t, window_w, window_h):
         self.rect.centerx += self.speed * delta_t
@@ -27,6 +26,5 @@ class Bullet_heart (pygame.sprite.Sprite):
             '''aggiungi energia: cuore che si riempe quando numero di bullet e prossimo a 0 e si svuota quando e prossimo a un tetto massimo da decidere'''
             '''aggiungi un suono di cuore che si riempe'''
             '''il codice cosi va bene, quando hitto i minion il cuore si andrebbe a riempire'''
-        self.rotation += 500 * delta_t
-        self.image = pygame.transform.rotate(self.original_image, self.rotation)
+       
         self.rect = self.image.get_frect(center = self.rect.center)

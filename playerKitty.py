@@ -16,10 +16,15 @@ import bullet_heart
 
 
 class Kitty(pygame.sprite.Sprite):
-    def __init__(self, image, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets):
+    def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets):
         super().__init__(groups) #eredito da pygame.sprite.Sprite
-        self.image = image
-        self.rect = self.image.get_frect(center = (spawn_x, spawn_y))
+        '''usando gli array'''
+        #self.images = images
+        #self.frame_image = 0
+        #self.image = images[self.frame_image]
+        '''usando gli spritesheet'''
+        self.images = images
+        #self.rect = self.image.get_frect(center = (spawn_x, spawn_y))
             #le classi Sprite ereditano dal parent pygame.sprite.Sprite
             #al quale sostituisco i self.surf e self rect con la superficie 
             #e il rect del mio player(nell init infati inizializzo anche il super)
@@ -64,6 +69,14 @@ class Kitty(pygame.sprite.Sprite):
 
 
     def update(self, delta_t, window_w, window_h):
+        
+        
+
+        seconds_from_last_frame = int (pygame.time.get_ticks() / 120 % 4)
+        print(seconds_from_last_frame)
+
+        self.image = self.images[seconds_from_last_frame]
+
         key = pygame.key.get_pressed()
 
         self.direction.x = int(key[pygame.K_d]) - int(key[pygame.K_a])
