@@ -1,0 +1,8 @@
+QUA INSERISCO LE COSE DA APPROFONDIRE
+
+-   come funziona il PARALLASSE e il TILING SYSTEM dello sfondo
+-   GRUPPO sprite per il blit
+-   NORMALIZZAZIONE del vettore direzione dovuta alla velocita diagonale
+-   BULLET SYSTEM del caricatore
+-   ANIMAZIONI  e SPRITE SHEET
+-   

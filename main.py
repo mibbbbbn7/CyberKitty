@@ -11,13 +11,13 @@ esportato in 128px (4x)
 '''
 | ======================== : TO DO LIST ANTIKITTY : ======================== |
 
--   URGENTE  bloccare il player ai bordi dello schermo
--   cuore che indica energia
+-   cuore che indica energia +++ modifica bullet systema
 -   rifai sprite pixel perfect
 -   aggiungi suono
--   aggiungi animazioni sprite --> ok, ma implementa divisione della spitesheet
 -   nemici che sparano
 -   nemici che sparano con colpi che inseguono
+-   -----------------------------------------------------------------------------URGENTE  bloccare il player ai bordi dello schermo
+-   -----------------------------------------------------------------------------aggiungi animazioni sprite 
 
 | ========================================================================== |
 '''
@@ -44,25 +44,20 @@ clock = pygame.time.Clock()
 #===========================================
 '''imports'''
 minion_image = pygame.image.load(os.path.join("data", "minion", "minion0.png")).convert_alpha()
+
 bullet_heart_image = pygame.image.load(os.path.join("data", "ammo", "ammonition0.png")).convert_alpha()
 
-
-kitty_sprite_sheet = pygame.image.load(os.path.join("data", "kitty", "kittySheet.png")).convert_alpha()
-kitty_sprites = []
+kitty_sprites = [] #1100/4=27.5
 for i in range(0, 4):
     kitty_sprite = pygame.image.load(os.path.join("data", "kitty", f"kittyx4{i}.png")).convert_alpha()
     kitty_sprites.append(kitty_sprite)
-#kitty_image = pygame.image.load(os.path.join("data", "kitty", "kittyx40.png")).convert_alpha() #1100/4=27.5
 
 parallax_sprites = [] #carico in una lista gli sprite del mio parallasse
 for i in range(0, 6):
     parallax_sprite = pygame.image.load(os.path.join("data", "background", f"viola1{i}.png")).convert_alpha()
     parallax_sprites.append(parallax_sprite)
+
 font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 30)
-
-
-
-
 
 antiKitty_txt = font_pixel.render('AntiKitty', False, (255, 255, 255)) #testo da scrivere, anti aliasing, colore
     
@@ -95,7 +90,7 @@ def draw_parallax_front_layer():
 '''disegno nel group my sprites'''
 my_sprites = pygame.sprite.Group()
 my_bullets = pygame.sprite.Group()
-kitty = playerKitty.Kitty(kitty_sprite_sheet, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets) #per argomenti vedi definizione Kitty in playerKitty
+kitty = playerKitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets) #per argomenti vedi definizione Kitty in playerKitty
 
 
 my_minions = pygame.sprite.Group()

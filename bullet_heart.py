@@ -13,7 +13,7 @@ class Bullet_heart (pygame.sprite.Sprite):
         self.original_image = image
         self.image = self.original_image
         self.rect = self.image.get_frect(midleft = pos)
-        self.exist_duration_time = 6000
+        self.exist_duration_time = 5000
         self.creation_time = pygame.time.get_ticks()
         self.mask = pygame.mask.from_surface(self.image)
         self.speed = 900

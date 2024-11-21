@@ -18,18 +18,14 @@ import bullet_heart
 class Kitty(pygame.sprite.Sprite):
     def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets):
         super().__init__(groups) #eredito da pygame.sprite.Sprite
-        '''usando gli array'''
-        #self.images = images
-        #self.frame_image = 0
-        #self.image = images[self.frame_image]
-        '''usando gli spritesheet'''
+ 
         self.images = images
-        #self.rect = self.image.get_frect(center = (spawn_x, spawn_y))
+        self.frame_image = 0
+        self.image = self.images[self.frame_image]
+        self.rect = self.image.get_frect(center = (spawn_x, spawn_y))
             #le classi Sprite ereditano dal parent pygame.sprite.Sprite
             #al quale sostituisco i self.surf e self rect con la superficie 
             #e il rect del mio player(nell init infati inizializzo anche il super)
-        self.bullet_heart_image = bullet_heart_image
-        self.my_bullets = my_bullets
         self.direction = pygame.Vector2(0, 0)
         self.speed = 800 
 
@@ -45,11 +41,9 @@ class Kitty(pygame.sprite.Sprite):
         self.fire_time = 0
         self.fire_cooldown = 150
 
-        #mask
-        #mask = pygame.mask.from_surface(self.image)
-        #mask_surf = mask.to_surface()
-        #mask_surf.set_colorkey((0, 0, 0))
-        #self.image = mask_surf
+        self.bullet_heart_image = bullet_heart_image
+        self.my_bullets = my_bullets
+ 
         self.mask = pygame.mask.from_surface(self.image)
         
     
@@ -73,7 +67,6 @@ class Kitty(pygame.sprite.Sprite):
         
 
         seconds_from_last_frame = int (pygame.time.get_ticks() / 120 % 4)
-        print(seconds_from_last_frame)
 
         self.image = self.images[seconds_from_last_frame]
 
@@ -81,10 +74,29 @@ class Kitty(pygame.sprite.Sprite):
 
         self.direction.x = int(key[pygame.K_d]) - int(key[pygame.K_a])
         self.direction.y = int(key[pygame.K_s]) - int(key[pygame.K_w])
+        if self.rect.right > window_w + 70:
+            self.rect.right = window_w + 70
+        if self.rect.left < -70:
+            self.rect.left = -70
+        print(self.rect.top)
+        if self.rect.bottom > 750:
+            self.rect.bottom = 750
+        if self.rect.top < -40:
+            self.rect.top = -40
             #kye[pygame.K_tasto] sono dei booleani quindi se li sommo in 
             #questo modo trasformati in int mi danno la direzione corrette,
             #inoltre quando i tasti non sono premuti assumono False che è 0
             #percio il player se ne ritorna con la direction x e/o y a 0
+        #if self.rect.right < window_w + 70:
+        #    self.direction.x = int(key[pygame.K_d])
+        #if self.rect.left > -70:
+        #    self.direction.x -= int(key[pygame.K_a])
+        #
+        #if self.rect.bottom < window_h + 70:
+        #    self.direction.y = int(key[pygame.K_s]) 
+        #if self.rect.top > - 70:
+        #    self.direction.y = - int(key[pygame.K_w])
+    
         
         if self.direction:        #un vector restituisce true quando è diverso da 0
             self.direction = self.direction.normalize()
@@ -96,7 +108,7 @@ class Kitty(pygame.sprite.Sprite):
     
         '''fire'''
 
-        if pygame.key.get_pressed()[pygame.K_k] and self.can_fire and len(self.my_bullets) < 17:
+        if pygame.key.get_pressed()[pygame.K_k] and self.can_fire and len(self.my_bullets) < 15:
             bullet_heart.Bullet_heart(self.bullet_heart_image, (self.gruppo, self.my_bullets), self.rect.midright)
             self.can_fire = False
             self.fire_time = pygame.time.get_ticks()
