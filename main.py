@@ -11,11 +11,14 @@ esportato in 128px (4x)
 '''
 | ======================== : TO DO LIST ANTIKITTY : ======================== |
 
+-   aggiungi scintille quando il player spara
+-   aggiungi nuvolette dietro il player
 -   cuore che indica energia +++ modifica bullet systema
 -   rifai sprite pixel perfect
 -   aggiungi suono
 -   nemici che sparano
 -   nemici che sparano con colpi che inseguono
+-   guarda a cosa mi servivano le mask
 -   -----------------------------------------------------------------------------URGENTE  bloccare il player ai bordi dello schermo
 -   -----------------------------------------------------------------------------aggiungi animazioni sprite 
 
@@ -43,18 +46,25 @@ pygame.display.set_caption("AntiKitty")
 clock = pygame.time.Clock()
 #===========================================
 '''imports'''
-minion_image = pygame.image.load(os.path.join("data", "minion", "minion0.png")).convert_alpha()
+minion_image = pygame.transform.scale(pygame.image.load(os.path.join("data", "minion", "minion0.png")).convert_alpha(), (112, 92))
+minion_sprites = [] #1100/4=27.5
+for i in range(0, 4):
+    minion_sprite = pygame.image.load(os.path.join("data", "minion", f"flying{i}.png")).convert_alpha()
+    minion_sprite = pygame.transform.scale(minion_sprite, (112, 96))
+    minion_sprites.append(minion_sprite)
 
-bullet_heart_image = pygame.image.load(os.path.join("data", "ammo", "ammonition0.png")).convert_alpha()
+
+bullet_heart_image = pygame.transform.scale(pygame.image.load(os.path.join("data", "bullet", "bullet0.png")).convert_alpha(), (20, 20))
 
 kitty_sprites = [] #1100/4=27.5
 for i in range(0, 4):
-    kitty_sprite = pygame.image.load(os.path.join("data", "kitty", f"kittyx4{i}.png")).convert_alpha()
+    kitty_sprite = pygame.image.load(os.path.join("data", "kitty", f"kittyx{i}.png")).convert_alpha()
+    kitty_sprite = pygame.transform.scale(kitty_sprite, (112, 96))
     kitty_sprites.append(kitty_sprite)
 
 parallax_sprites = [] #carico in una lista gli sprite del mio parallasse
 for i in range(0, 6):
-    parallax_sprite = pygame.image.load(os.path.join("data", "background", f"viola1{i}.png")).convert_alpha()
+    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", f"viola1{i}.png")).convert_alpha(), (window_width, window_height))
     parallax_sprites.append(parallax_sprite)
 
 font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 30)
@@ -121,12 +131,6 @@ def show_general_text():
     window_surface.blit(bullet_num_txt, bullet_num_rect) #testo da blittare, posizione
     pygame.draw.rect(window_surface, (255, 255, 255), bullet_num_rect.inflate(20, 30).move(-2, 0), 5, 10)
 
-def take_screen_shot(window_surface):
-    screen_shot_time = time.asctime(time.localtime(time.time()))
-    screen_shot_time = screen_shot_time.replace(" ", "_")
-    screen_shot_time = screen_shot_time.replace(":", "_")
-    path_screen_shot = "screenshots/" + screen_shot_time + ".png"
-    pygame.image.save(window_surface, path_screen_shot)
 
 execute = True
 #==================================================================================================
@@ -141,7 +145,7 @@ while execute:
             if event.key == pygame.K_1:     #chiude quando pigio (1)
                 execute = False
         if event.type == minion_spawn_event:
-             minionEnemy.Minion(minion_image, (my_sprites, my_minions), (window_width + 20), int(random.randint(0, window_height)))
+             minionEnemy.Minion(minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(0, window_height)))
     
     '''screen'''
     draw_parallax()

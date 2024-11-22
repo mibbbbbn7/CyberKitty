@@ -87,15 +87,6 @@ class Kitty(pygame.sprite.Sprite):
             #questo modo trasformati in int mi danno la direzione corrette,
             #inoltre quando i tasti non sono premuti assumono False che è 0
             #percio il player se ne ritorna con la direction x e/o y a 0
-        #if self.rect.right < window_w + 70:
-        #    self.direction.x = int(key[pygame.K_d])
-        #if self.rect.left > -70:
-        #    self.direction.x -= int(key[pygame.K_a])
-        #
-        #if self.rect.bottom < window_h + 70:
-        #    self.direction.y = int(key[pygame.K_s]) 
-        #if self.rect.top > - 70:
-        #    self.direction.y = - int(key[pygame.K_w])
     
         
         if self.direction:        #un vector restituisce true quando è diverso da 0
@@ -108,7 +99,7 @@ class Kitty(pygame.sprite.Sprite):
     
         '''fire'''
 
-        if pygame.key.get_pressed()[pygame.K_k] and self.can_fire and len(self.my_bullets) < 15:
+        if pygame.key.get_pressed()[pygame.K_k] and self.can_fire:
             bullet_heart.Bullet_heart(self.bullet_heart_image, (self.gruppo, self.my_bullets), self.rect.midright)
             self.can_fire = False
             self.fire_time = pygame.time.get_ticks()

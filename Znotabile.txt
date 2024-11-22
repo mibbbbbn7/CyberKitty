@@ -5,4 +5,17 @@ QUA INSERISCO LE COSE DA APPROFONDIRE
 -   NORMALIZZAZIONE del vettore direzione dovuta alla velocita diagonale
 -   BULLET SYSTEM del caricatore
 -   ANIMAZIONI  e SPRITE SHEET
--   
+
+=======================SPRITE=======================
+    
++++++++++++++++++++ CREATI DA ME +++++++++++++++++++ 
+        > player kitty
+        > bullet heart
+
++++++++++++++ MODIFICANDO FREE ASSETS +++++++++++++
+        > background https://rengodev.itch.io/free-cloud-sky-parallax-background?download
+        > minion https://xzany.itch.io/flying-demon-2d-pixel-art
+
+||  gli asset scaricati sono stati modificati nei colori e nella risoluione per mattenere
+||  una dimensione di pixel costante per tutti gli assets del gioco
+

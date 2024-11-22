@@ -1,1 +1,2 @@
-bullet_heart_image = pygame.image.load(os.path.join("data", "ammo", "ammonition0.png")).convert_alpha()
+
+clock = pygame.time.Clock()
