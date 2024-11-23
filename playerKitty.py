@@ -39,7 +39,7 @@ class Kitty(pygame.sprite.Sprite):
         #fire cool down
         self.can_fire = True
         self.fire_time = 0
-        self.fire_cooldown = 150
+        self.fire_cooldown = 100
 
         self.bullet_heart_image = bullet_heart_image
         self.my_bullets = my_bullets
@@ -64,7 +64,6 @@ class Kitty(pygame.sprite.Sprite):
 
     def update(self, delta_t, window_w, window_h):
         
-        
 
         seconds_from_last_frame = int (pygame.time.get_ticks() / 120 % 4)
 
@@ -78,7 +77,6 @@ class Kitty(pygame.sprite.Sprite):
             self.rect.right = window_w + 70
         if self.rect.left < -70:
             self.rect.left = -70
-        print(self.rect.top)
         if self.rect.bottom > 750:
             self.rect.bottom = 750
         if self.rect.top < -40:

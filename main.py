@@ -30,7 +30,6 @@ import random
 import math
 import playerKitty
 import minionEnemy
-from background import draw_parallaxxx
 import time
 
 os.environ['SDL_VIDEO_CENTERD'] = '1'
@@ -46,10 +45,10 @@ pygame.display.set_caption("AntiKitty")
 clock = pygame.time.Clock()
 #===========================================
 '''imports'''
-minion_image = pygame.transform.scale(pygame.image.load(os.path.join("data", "minion", "minion0.png")).convert_alpha(), (112, 92))
+
 minion_sprites = [] #1100/4=27.5
 for i in range(0, 4):
-    minion_sprite = pygame.image.load(os.path.join("data", "minion", f"flying{i}.png")).convert_alpha()
+    minion_sprite = pygame.image.load(os.path.join("data", "minion_red", "flying", f"flying{i}.png")).convert_alpha()
     minion_sprite = pygame.transform.scale(minion_sprite, (112, 96))
     minion_sprites.append(minion_sprite)
 
@@ -135,7 +134,7 @@ def show_general_text():
 execute = True
 #==================================================================================================
 
-
+pygame.mouse.set_visible(False)
 while execute:
     dt = clock.tick(60) / 1000 # DELTA TIME, 60 fps
 
@@ -145,7 +144,7 @@ while execute:
             if event.key == pygame.K_1:     #chiude quando pigio (1)
                 execute = False
         if event.type == minion_spawn_event:
-             minionEnemy.Minion(minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(0, window_height)))
+             minionEnemy.Minion(minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(0, window_height - 100)))
     
     '''screen'''
     draw_parallax()
