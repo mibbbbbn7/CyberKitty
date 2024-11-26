@@ -28,8 +28,8 @@ import pygame
 import os
 import random
 import math
-import playerKitty
-import minionEnemy
+import player_kitty
+import minion_enemy
 import time
 
 os.environ['SDL_VIDEO_CENTERD'] = '1'
@@ -46,12 +46,17 @@ clock = pygame.time.Clock()
 #===========================================
 '''imports'''
 
-minion_sprites = [] #1100/4=27.5
+red_minion_sprites = [] #1100/4=27.5
 for i in range(0, 4):
     minion_sprite = pygame.image.load(os.path.join("data", "minion_red", "flying", f"flying{i}.png")).convert_alpha()
     minion_sprite = pygame.transform.scale(minion_sprite, (112, 96))
-    minion_sprites.append(minion_sprite)
+    red_minion_sprites.append(minion_sprite)
 
+red_minion_death_sprites = []
+for i in range(0, 5):
+    red_minion_death_sprite = pygame.image.load(os.path.join("data", "minion_red_death", f"death{i}.png")).convert_alpha()
+    red_minion_death_sprite = pygame.transform.scale(red_minion_death_sprite, (112, 96))
+    red_minion_death_sprites.append(red_minion_death_sprite)
 
 bullet_heart_image = pygame.transform.scale(pygame.image.load(os.path.join("data", "bullet", "bullet0.png")).convert_alpha(), (20, 20))
 
@@ -69,7 +74,8 @@ for i in range(0, 6):
 font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 30)
 
 antiKitty_txt = font_pixel.render('AntiKitty', False, (255, 255, 255)) #testo da scrivere, anti aliasing, colore
-    
+
+
 '''blit di sfondo'''
 
 speed_scroll_parallax = [0, 0, 0, 0, 0, 0]
@@ -99,7 +105,7 @@ def draw_parallax_front_layer():
 '''disegno nel group my sprites'''
 my_sprites = pygame.sprite.Group()
 my_bullets = pygame.sprite.Group()
-kitty = playerKitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets) #per argomenti vedi definizione Kitty in playerKitty
+kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets) #per argomenti vedi definizione Kitty in player_kitty
 
 
 my_minions = pygame.sprite.Group()
@@ -144,7 +150,7 @@ while execute:
             if event.key == pygame.K_1:     #chiude quando pigio (1)
                 execute = False
         if event.type == minion_spawn_event:
-             minionEnemy.Minion(minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(0, window_height - 100)))
+            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(150, window_height - 200)), red_minion_death_sprites, my_sprites)
     
     '''screen'''
     draw_parallax()
