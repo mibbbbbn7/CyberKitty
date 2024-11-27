@@ -24,7 +24,7 @@ class Minion(pygame.sprite.Sprite):
 
     def hit(self):
         self.health -= 1
-        if self.health == 0:
+        if self.health <= 0:
             self.kill()
             death = death_minion.Death_minion(self.rect.midleft, self.death_images, self.my_sprite_blit_group)
     
@@ -57,4 +57,3 @@ class Minion(pygame.sprite.Sprite):
         
         '''movement'''
         self.minion_move(delta_t, window_w, window_h)
-        

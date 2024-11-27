@@ -11,7 +11,7 @@ esportato in 128px (4x)
 '''
 | ======================== : TO DO LIST ANTIKITTY : ======================== |
 
--   aggiungi scintille quando il player spara
+-   ----------------------------------------------------------------------------aggiungi scintille quando il player spara
 -   aggiungi nuvolette dietro il player
 -   cuore che indica energia +++ modifica bullet systema
 -   rifai sprite pixel perfect
@@ -30,6 +30,7 @@ import random
 import math
 import player_kitty
 import minion_enemy
+import dust
 import time
 
 os.environ['SDL_VIDEO_CENTERD'] = '1'
@@ -59,6 +60,16 @@ for i in range(0, 5):
     red_minion_death_sprites.append(red_minion_death_sprite)
 
 bullet_heart_image = pygame.transform.scale(pygame.image.load(os.path.join("data", "bullet", "bullet0.png")).convert_alpha(), (20, 20))
+
+fire_sprites = []
+for i in range(0, 3):
+    fire_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "fire", f"fire{i}.png")).convert_alpha(), (60, 96))
+    fire_sprites.append(fire_sprite)
+
+dust_sprites = []
+for i in range(0, 4):
+    dust_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "dust", f"dust{i}.png")).convert_alpha(), (32, 32))
+    dust_sprites.append(dust_sprite)
 
 kitty_sprites = [] #1100/4=27.5
 for i in range(0, 4):
@@ -105,12 +116,16 @@ def draw_parallax_front_layer():
 '''disegno nel group my sprites'''
 my_sprites = pygame.sprite.Group()
 my_bullets = pygame.sprite.Group()
-kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets) #per argomenti vedi definizione Kitty in player_kitty
+dust_from_kitty_event = pygame.event.custom_type()
+pygame.time.set_timer(dust_from_kitty_event, 180)
+kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets, fire_sprites) #per argomenti vedi definizione Kitty in player_kitty
+
 
 
 my_minions = pygame.sprite.Group()
 minion_spawn_event = pygame.event.custom_type()
 pygame.time.set_timer(minion_spawn_event, 3000)
+
 
 def collisions():
     if pygame.sprite.spritecollide(kitty, my_minions, True, pygame.sprite.collide_mask):
@@ -151,7 +166,8 @@ while execute:
                 execute = False
         if event.type == minion_spawn_event:
             minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(150, window_height - 200)), red_minion_death_sprites, my_sprites)
-    
+        if event.type == dust_from_kitty_event:
+            dust.Dust(dust_sprites, kitty.get_bottomleft(), my_sprites)
     '''screen'''
     draw_parallax()
     my_sprites.update(dt, window_width, window_height)

@@ -1,6 +1,7 @@
 import pygame
 import os
 import bullet_heart
+import fire
 
 #class Bullet_heart (pygame.sprite.Sprite):
 #    def __init__(self, image, groups, pos):
@@ -16,7 +17,7 @@ import bullet_heart
 
 
 class Kitty(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets):
+    def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets, fire_images):
         super().__init__(groups) #eredito da pygame.sprite.Sprite
  
         self.images = images
@@ -43,6 +44,8 @@ class Kitty(pygame.sprite.Sprite):
 
         self.bullet_heart_image = bullet_heart_image
         self.my_bullets = my_bullets
+
+        self.fire_images = fire_images
  
         self.mask = pygame.mask.from_surface(self.image)
         
@@ -69,10 +72,16 @@ class Kitty(pygame.sprite.Sprite):
 
         self.image = self.images[seconds_from_last_frame]
 
+            #kye[pygame.K_tasto] sono dei booleani quindi se li sommo in 
+            #questo modo trasformati in int mi danno la direzione corrette,
+            #inoltre quando i tasti non sono premuti assumono False che è 0
+            #percio il player se ne ritorna con la direction x e/o y a 0 :D
         key = pygame.key.get_pressed()
 
         self.direction.x = int(key[pygame.K_d]) - int(key[pygame.K_a])
         self.direction.y = int(key[pygame.K_s]) - int(key[pygame.K_w])
+
+            #per limitare il movimento del player allinterno dello schermo
         if self.rect.right > window_w + 70:
             self.rect.right = window_w + 70
         if self.rect.left < -70:
@@ -81,10 +90,6 @@ class Kitty(pygame.sprite.Sprite):
             self.rect.bottom = 750
         if self.rect.top < -40:
             self.rect.top = -40
-            #kye[pygame.K_tasto] sono dei booleani quindi se li sommo in 
-            #questo modo trasformati in int mi danno la direzione corrette,
-            #inoltre quando i tasti non sono premuti assumono False che è 0
-            #percio il player se ne ritorna con la direction x e/o y a 0
     
         
         if self.direction:        #un vector restituisce true quando è diverso da 0
@@ -98,6 +103,7 @@ class Kitty(pygame.sprite.Sprite):
         '''fire'''
 
         if pygame.key.get_pressed()[pygame.K_k] and self.can_fire:
+            fire.Fire(self.fire_images, self.rect.midright, self.gruppo)
             bullet_heart.Bullet_heart(self.bullet_heart_image, (self.gruppo, self.my_bullets), self.rect.midright)
             self.can_fire = False
             self.fire_time = pygame.time.get_ticks()
@@ -109,3 +115,6 @@ class Kitty(pygame.sprite.Sprite):
         
         self.dash_timer()
         self.fire_timer()
+
+    def get_bottomleft(self):
+        return self.rect.bottomleft
