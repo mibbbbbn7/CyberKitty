@@ -12,13 +12,14 @@ esportato in 128px (4x)
 | ======================== : TO DO LIST ANTIKITTY : ======================== |
 
 -   ----------------------------------------------------------------------------aggiungi scintille quando il player spara
--   aggiungi nuvolette dietro il player
+-   ----------------------------------------------------------------------------aggiungi nuvolette dietro il player
 -   cuore che indica energia +++ modifica bullet systema
--   rifai sprite pixel perfect
+-   ----------------------------------------------------------------------------rifai sprite pixel perfect
 -   aggiungi suono
 -   nemici che sparano
 -   nemici che sparano con colpi che inseguono
 -   guarda a cosa mi servivano le mask
+-   rispetto al punteggi permetti spawn di nemici più forti, ex 0-100 minon | 100-200 minion, minion wizard | 200-300 minion, minion wizard, minion tank
 -   -----------------------------------------------------------------------------URGENTE  bloccare il player ai bordi dello schermo
 -   -----------------------------------------------------------------------------aggiungi animazioni sprite 
 
@@ -58,6 +59,11 @@ for i in range(0, 5):
     red_minion_death_sprite = pygame.image.load(os.path.join("data", "minion_red_death", f"death{i}.png")).convert_alpha()
     red_minion_death_sprite = pygame.transform.scale(red_minion_death_sprite, (112, 96))
     red_minion_death_sprites.append(red_minion_death_sprite)
+
+fireball_sprites = []
+for i in range(0, 1):
+    fireball_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "fireball", f"fireball{i}.png")).convert_alpha(), (20, 20))
+    fireball_sprites.append(fireball_sprite)
 
 bullet_heart_image = pygame.transform.scale(pygame.image.load(os.path.join("data", "bullet", "bullet0.png")).convert_alpha(), (20, 20))
 
@@ -165,7 +171,7 @@ while execute:
             if event.key == pygame.K_1:     #chiude quando pigio (1)
                 execute = False
         if event.type == minion_spawn_event:
-            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(150, window_height - 200)), red_minion_death_sprites, my_sprites)
+            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(150, window_height - 200)), red_minion_death_sprites, my_sprites, fireball_sprites)
         if event.type == dust_from_kitty_event:
             dust.Dust(dust_sprites, kitty.get_bottomleft(), my_sprites)
     '''screen'''
