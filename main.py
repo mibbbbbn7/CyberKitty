@@ -11,6 +11,8 @@ esportato in 128px (4x)
 '''
 | ======================== : TO DO LIST ANTIKITTY : ======================== |
 
+-   CREA GRUPPO PER PROIETTILI DEI MINION
+-   aggiungi array di stati per gli sprite del minion
 -   ----------------------------------------------------------------------------aggiungi scintille quando il player spara
 -   ----------------------------------------------------------------------------aggiungi nuvolette dietro il player
 -   cuore che indica energia +++ modifica bullet systema
@@ -54,6 +56,11 @@ for i in range(0, 4):
     minion_sprite = pygame.transform.scale(minion_sprite, (112, 96))
     red_minion_sprites.append(minion_sprite)
 
+for i in range(0, 4):
+    minion_sprite = pygame.image.load(os.path.join("data", "minion_red", "attack", f"attack{i}.png")).convert_alpha()
+    minion_sprite = pygame.transform.scale(minion_sprite, (112, 96))
+    red_minion_sprites.append(minion_sprite)
+
 red_minion_death_sprites = []
 for i in range(0, 5):
     red_minion_death_sprite = pygame.image.load(os.path.join("data", "minion_red_death", f"death{i}.png")).convert_alpha()
@@ -61,7 +68,7 @@ for i in range(0, 5):
     red_minion_death_sprites.append(red_minion_death_sprite)
 
 fireball_sprites = []
-for i in range(0, 1):
+for i in range(0, 3):
     fireball_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "fireball", f"fireball{i}.png")).convert_alpha(), (20, 20))
     fireball_sprites.append(fireball_sprite)
 
@@ -130,7 +137,7 @@ kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (windo
 
 my_minions = pygame.sprite.Group()
 minion_spawn_event = pygame.event.custom_type()
-pygame.time.set_timer(minion_spawn_event, 3000)
+pygame.time.set_timer(minion_spawn_event, 3500)
 
 
 def collisions():
@@ -186,3 +193,11 @@ while execute:
     pygame.display.update()
 
 pygame.QUIT
+
+#          ._____.  ___.  ___.  ___.  ___.           
+#     _____ |__\_ |__\_ |__\_ |__\_ |__\_ |__   ____  
+#    /     \|  || __ \| __ \| __ \| __ \| __ \ /    \ 
+#   |  Y Y  \  || \_\ \ \_\ \ \_\ \ \_\ \ \_\ \   |  \
+#   |__|_|  /__||___  /___  /___  /___  /___  /___|  /
+#         \/        \/    \/    \/    \/    \/     \/ 
+   

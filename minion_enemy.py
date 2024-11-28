@@ -25,6 +25,9 @@ class Minion(pygame.sprite.Sprite):
         self.can_count_time = True
         self.can_fire = True
         self.time_since_stopping = 0
+        self.states = ["flying", "attack"]
+        self.current_state = self.states[0]
+
 
 
     def hit(self):
@@ -46,28 +49,45 @@ class Minion(pygame.sprite.Sprite):
         
         if self.rect.centerx <= window_w/2 + 200:
             self.direction.x = 0
+            self.current_state = self.states[1]
             if self.can_count_time:
                 self.time_since_stopping = pygame.time.get_ticks()
                 self.can_count_time = False
 
         if self.direction.x == 0:
-            if self.can_fire:
-                self.can_fire = False
-                self.time_of_last_fire = pygame.time.get_ticks()
-                print("fireball!!")
+            #if self.can_fire:
+            #    self.can_fire = False
+            #    self.time_of_last_fire = pygame.time.get_ticks()
+            if self.image == self.images[5] and self.can_fire:
                 fireball.Fire_ball(self.fireball_images, self.rect.midleft, self.my_sprite_blit_group)
-            if pygame.time.get_ticks() - self.time_of_last_fire >= 2000:
+                self.can_fire = False
+            if self.image == self.images[7]:
                 self.can_fire = True
+            #if pygame.time.get_ticks() - self.time_of_last_fire >= 2000:
+            #    self.can_fire = True
             if pygame.time.get_ticks() - self.time_since_stopping >= 4000:
-                self.direction.x = 1
+                self.direction.x = 1.5
+                self.current_state = self.states[0]
         
         self.rect.center += self.direction * self.speed * delta_t
 
     def update(self, delta_t, window_w, window_h):
 
         '''animation'''
-        self.seconds_from_last_frame = int (pygame.time.get_ticks() / 120 % 4)
-        self.image = self.images[self.seconds_from_last_frame]
+        if self.current_state == self.states[0]:
+            self.seconds_from_last_frame = int (pygame.time.get_ticks() / 120 % 4)
+            self.image = self.images[self.seconds_from_last_frame]
+
+        if self.current_state == self.states[1]:
+            self.seconds_from_last_frame = int (pygame.time.get_ticks() / 180 % 7)
+            self.image = self.images[self.seconds_from_last_frame + 1]
+            if self.seconds_from_last_frame % 2 == 0:
+                self.rect.y -= 0.8
+            if self.seconds_from_last_frame % 2 == 1:
+                self.rect.y += 1
+
+        if self.direction.x == 1.5:
+            self.image = pygame.transform.flip(self.image, True, False)
 
         if self.health == 2:
             self.image = pygame.transform.grayscale(self.image)
@@ -80,3 +100,4 @@ class Minion(pygame.sprite.Sprite):
         
         '''movement'''
         self.minion_move_and_shoot(delta_t, window_w, window_h)
+
