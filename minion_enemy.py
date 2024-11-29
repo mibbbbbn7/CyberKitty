@@ -8,14 +8,14 @@ versione modificata di https://xzany.itch.io/flying-demon-2d-pixel-art
 '''
 
 class Minion(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, death_images, my_sprite_blit_group, fireball_images):
+    def __init__(self, images, groups, spawn_x, spawn_y, death_images, my_sprite_blit_group, fireball_images, my_fireball_group):
         super().__init__(groups) 
         self.images = images
         self.frame_image = 0
         self.image = self.images[self.frame_image]
         self.rect = self.image.get_frect(center = (spawn_x, spawn_y))
         self.direction = pygame.Vector2(-1, 0)
-        self.speed = 200 
+        self.speed = 200
         self.spawned_at_time = pygame.time.get_ticks()
         self.health = 5
         self.mask = pygame.mask.from_surface(self.image)
@@ -27,6 +27,7 @@ class Minion(pygame.sprite.Sprite):
         self.time_since_stopping = 0
         self.states = ["flying", "attack"]
         self.current_state = self.states[0]
+        self.my_fireball_group = my_fireball_group
 
 
 
@@ -59,7 +60,7 @@ class Minion(pygame.sprite.Sprite):
             #    self.can_fire = False
             #    self.time_of_last_fire = pygame.time.get_ticks()
             if self.image == self.images[5] and self.can_fire:
-                fireball.Fire_ball(self.fireball_images, self.rect.midleft, self.my_sprite_blit_group)
+                fireball.Fire_ball(self.fireball_images,(self.my_sprite_blit_group, self.my_fireball_group), self.rect.midleft)
                 self.can_fire = False
             if self.image == self.images[7]:
                 self.can_fire = True

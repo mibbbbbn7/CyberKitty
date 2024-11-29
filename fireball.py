@@ -3,7 +3,7 @@ import random
 
 
 class Fire_ball(pygame.sprite.Sprite):
-    def __init__(self, images, pos, groups):
+    def __init__(self, images, groups, pos):
         super().__init__(groups) 
         self.images = images
         self.frame_image = 0

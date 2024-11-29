@@ -129,6 +129,7 @@ def draw_parallax_front_layer():
 '''disegno nel group my sprites'''
 my_sprites = pygame.sprite.Group()
 my_bullets = pygame.sprite.Group()
+my_fireballs = pygame.sprite.Group()
 dust_from_kitty_event = pygame.event.custom_type()
 pygame.time.set_timer(dust_from_kitty_event, 180)
 kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets, fire_sprites) #per argomenti vedi definizione Kitty in player_kitty
@@ -142,18 +143,25 @@ pygame.time.set_timer(minion_spawn_event, 3500)
 
 def collisions():
     if pygame.sprite.spritecollide(kitty, my_minions, True, pygame.sprite.collide_mask):
-        print("Kitty hit")
-        quit()
+        print("Kitty minion hit")
+        kitty.get_damage()
             
     for minion in pygame.sprite.Group.sprites(my_minions):
         if (pygame.sprite.spritecollide(minion, my_bullets, True)):
             minion.hit()
-
+        
+    if pygame.sprite.spritecollide(kitty, my_fireballs, True, pygame.sprite.collide_mask):
+        print("Kitty fireball hit")
+        kitty.get_damage()
     
 def show_minion_health():
     for minion in pygame.sprite.Group.sprites(my_minions):
         minion_health = font_pixel.render(f"{minion.get_minion_health()}", False, (255, 255, 255))
         window_surface.blit(minion_health, (minion.rect.centerx - 27, minion.rect.centery - 50))
+
+def show_kitty_health():
+    kitty_health = font_pixel.render(f"{kitty.get_kitty_health()}", False, (255, 255, 255))
+    window_surface.blit(kitty_health, (kitty.rect.centerx - 27, kitty.rect.centery - 80))
 
 def show_general_text():
     window_surface.blit(antiKitty_txt, (window_width/2 - 90, 10))
@@ -164,6 +172,10 @@ def show_general_text():
     window_surface.blit(bullet_num_txt, bullet_num_rect) #testo da blittare, posizione
     pygame.draw.rect(window_surface, (255, 255, 255), bullet_num_rect.inflate(20, 30).move(-2, 0), 5, 10)
 
+def render_text():
+    show_kitty_health()
+    show_general_text()
+    show_minion_health()
 
 execute = True
 #==================================================================================================
@@ -171,14 +183,14 @@ execute = True
 pygame.mouse.set_visible(False)
 while execute:
     dt = clock.tick(60) / 1000 # DELTA TIME, 60 fps
-
+    
     '''events'''
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_1:     #chiude quando pigio (1)
                 execute = False
         if event.type == minion_spawn_event:
-            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(150, window_height - 200)), red_minion_death_sprites, my_sprites, fireball_sprites)
+            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(150, window_height - 200)), red_minion_death_sprites, my_sprites, fireball_sprites, my_fireballs)
         if event.type == dust_from_kitty_event:
             dust.Dust(dust_sprites, kitty.get_bottomleft(), my_sprites)
     '''screen'''
@@ -186,10 +198,8 @@ while execute:
     my_sprites.update(dt, window_width, window_height)
     collisions()
     my_sprites.draw(window_surface)
-    draw_parallax_front_layer()
-
-    show_minion_health()
-    show_general_text()
+    draw_parallax_front_layer() 
+    render_text()
     pygame.display.update()
 
 pygame.QUIT

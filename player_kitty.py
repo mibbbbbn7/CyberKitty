@@ -29,7 +29,7 @@ class Kitty(pygame.sprite.Sprite):
             #e il rect del mio player(nell init infati inizializzo anche il super)
         self.direction = pygame.Vector2(0, 0)
         self.speed = 800 
-
+        self.health = 6
         self.gruppo = groups
 
         #dash cool down
@@ -49,7 +49,12 @@ class Kitty(pygame.sprite.Sprite):
  
         self.mask = pygame.mask.from_surface(self.image)
         
+    def get_damage(self):
+        self.health -= 1
     
+    def get_kitty_health(self):
+        return self.health
+
     def dash_timer(self):
         '''dash ready'''
         if not self.can_dash:
@@ -64,10 +69,12 @@ class Kitty(pygame.sprite.Sprite):
             if current_time - self.fire_time >= self.fire_cooldown:
                 self.can_fire = True
 
+    def get_bottomleft(self):
+        return self.rect.bottomleft
 
     def update(self, delta_t, window_w, window_h):
         
-
+        
         seconds_from_last_frame = int (pygame.time.get_ticks() / 120 % 4)
 
         self.image = self.images[seconds_from_last_frame]
@@ -115,6 +122,3 @@ class Kitty(pygame.sprite.Sprite):
         
         self.dash_timer()
         self.fire_timer()
-
-    def get_bottomleft(self):
-        return self.rect.bottomleft
