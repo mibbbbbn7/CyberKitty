@@ -2,6 +2,7 @@ import pygame
 import os
 import death_minion
 import fireball
+import points_system
 
 '''
 versione modificata di https://xzany.itch.io/flying-demon-2d-pixel-art

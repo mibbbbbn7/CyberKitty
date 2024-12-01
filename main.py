@@ -11,14 +11,15 @@ esportato in 128px (4x)
 '''
 | ======================== : TO DO LIST ANTIKITTY : ======================== |
 
--   CREA GRUPPO PER PROIETTILI DEI MINION
--   aggiungi array di stati per gli sprite del minion
+-   aggiungi la scritta +10, +20, +30 alla morte del minion, senza questa non si capisce di aver guadagnato dei punti 
+-   ----------------------------------------------------------------------------CREA GRUPPO PER PROIETTILI DEI MINION
+-   ----------------------------------------------------------------------------aggiungi array di stati per gli sprite del minion
 -   ----------------------------------------------------------------------------aggiungi scintille quando il player spara
 -   ----------------------------------------------------------------------------aggiungi nuvolette dietro il player
 -   cuore che indica energia +++ modifica bullet systema
 -   ----------------------------------------------------------------------------rifai sprite pixel perfect
 -   aggiungi suono
--   nemici che sparano
+-   ----------------------------------------------------------------------------nemici che sparano
 -   nemici che sparano con colpi che inseguono
 -   guarda a cosa mi servivano le mask
 -   rispetto al punteggi permetti spawn di nemici più forti, ex 0-100 minon | 100-200 minion, minion wizard | 200-300 minion, minion wizard, minion tank
@@ -35,6 +36,7 @@ import player_kitty
 import minion_enemy
 import dust
 import time
+import points_system
 
 os.environ['SDL_VIDEO_CENTERD'] = '1'
 
@@ -140,20 +142,33 @@ my_minions = pygame.sprite.Group()
 minion_spawn_event = pygame.event.custom_type()
 pygame.time.set_timer(minion_spawn_event, 3500)
 
+'''game systems'''
+points_tot = 0
+points_from_time = 0
+points_from_actions = 0
 
 def collisions():
     if pygame.sprite.spritecollide(kitty, my_minions, True, pygame.sprite.collide_mask):
         print("Kitty minion hit")
         kitty.get_damage()
-            
+      
     for minion in pygame.sprite.Group.sprites(my_minions):
         if (pygame.sprite.spritecollide(minion, my_bullets, True)):
             minion.hit()
+            if minion.health <= 0:
+                kitty.add_ten_points()
+        
         
     if pygame.sprite.spritecollide(kitty, my_fireballs, True, pygame.sprite.collide_mask):
         print("Kitty fireball hit")
         kitty.get_damage()
-    
+        
+
+
+def show_points():
+    points_text = font_pixel.render(f"{points_tot}", False, (255, 255, 255))
+    window_surface.blit(points_text, (100, window_height - 100))
+
 def show_minion_health():
     for minion in pygame.sprite.Group.sprites(my_minions):
         minion_health = font_pixel.render(f"{minion.get_minion_health()}", False, (255, 255, 255))
@@ -176,6 +191,9 @@ def render_text():
     show_kitty_health()
     show_general_text()
     show_minion_health()
+    show_points()
+
+
 
 execute = True
 #==================================================================================================
@@ -183,7 +201,7 @@ execute = True
 pygame.mouse.set_visible(False)
 while execute:
     dt = clock.tick(60) / 1000 # DELTA TIME, 60 fps
-    
+    time_from_start = pygame.time.get_ticks()
     '''events'''
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -201,6 +219,10 @@ while execute:
     draw_parallax_front_layer() 
     render_text()
     pygame.display.update()
+
+    points_from_time = int(time_from_start / 100)
+    points_from_actions = kitty.get_action_points()
+    points_tot = points_from_time + points_from_actions
 
 pygame.QUIT
 

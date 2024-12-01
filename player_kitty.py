@@ -48,12 +48,19 @@ class Kitty(pygame.sprite.Sprite):
         self.fire_images = fire_images
  
         self.mask = pygame.mask.from_surface(self.image)
+        self.action_points = 0
         
     def get_damage(self):
         self.health -= 1
     
     def get_kitty_health(self):
         return self.health
+    
+    def get_action_points(self):
+        return self.action_points
+    
+    def add_ten_points(self):
+        self.action_points += 10
 
     def dash_timer(self):
         '''dash ready'''
