@@ -123,7 +123,7 @@ for i in range(0, parallax_layer_number):
 
 scroll_speeds = []
 for i in range(0, parallax_layer_number):
-    scroll_speeds.append(i + 1)
+    scroll_speeds.append(i + 2)
 
 parallax_width = parallax_sprites[0].get_width() #calcolo il numero di sprite in "tiles" che mi servono per coprire l'animazione infinita
 tiles = math.ceil(window_width / parallax_width) + 1 #+1 come buffer
