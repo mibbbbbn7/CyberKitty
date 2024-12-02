@@ -28,7 +28,7 @@ class Kitty(pygame.sprite.Sprite):
             #al quale sostituisco i self.surf e self rect con la superficie 
             #e il rect del mio player(nell init infati inizializzo anche il super)
         self.direction = pygame.Vector2(0, 0)
-        self.speed = 800 
+        self.speed = 700 
         self.health = 6
         self.gruppo = groups
 

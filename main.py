@@ -88,13 +88,27 @@ for i in range(0, 4):
 
 kitty_sprites = [] #1100/4=27.5
 for i in range(0, 4):
-    kitty_sprite = pygame.image.load(os.path.join("data", "kitty", f"kittyx{i}.png")).convert_alpha()
+    kitty_sprite = pygame.image.load(os.path.join("data", "kitty", "no_contour", f"kittyx{i}.png")).convert_alpha()
     kitty_sprite = pygame.transform.scale(kitty_sprite, (112, 96))
     kitty_sprites.append(kitty_sprite)
 
+parallax_layer_number = 5
 parallax_sprites = [] #carico in una lista gli sprite del mio parallasse
-for i in range(0, 6):
-    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", f"viola1{i}.png")).convert_alpha(), (window_width, window_height))
+#---------nuvola
+#for i in range(0, parallax_layer_number):
+#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "nuvola", f"nuvola1{i}.png")).convert_alpha(), (window_width, window_height))
+#    parallax_sprites.append(parallax_sprite)
+#---------demon_woods
+#for i in range(0, parallax_layer_number):
+#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "demon_woods", f"demon_woods1{i}.png")).convert_alpha(), (window_width, window_height))
+#    parallax_sprites.append(parallax_sprite)
+#---------industrial
+#for i in range(0, parallax_layer_number):
+#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "industrial", f"industrial1{i}.png")).convert_alpha(), (window_width, window_height))
+#    parallax_sprites.append(parallax_sprite)
+#---------night_forest
+for i in range(0, parallax_layer_number):
+    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "night_forest", f"night_forest1{i}.png")).convert_alpha(), (window_width, window_height))
     parallax_sprites.append(parallax_sprite)
 
 font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 30)
@@ -103,9 +117,13 @@ antiKitty_txt = font_pixel.render('AntiKitty', False, (255, 255, 255)) #testo da
 
 
 '''blit di sfondo'''
+speed_scroll_parallax = []
+for i in range(0, parallax_layer_number):
+    speed_scroll_parallax.append(0)
 
-speed_scroll_parallax = [0, 0, 0, 0, 0, 0]
-scroll_speeds = [1, 2, 3, 4, 5, 6]
+scroll_speeds = []
+for i in range(0, parallax_layer_number):
+    scroll_speeds.append(i + 1)
 
 parallax_width = parallax_sprites[0].get_width() #calcolo il numero di sprite in "tiles" che mi servono per coprire l'animazione infinita
 tiles = math.ceil(window_width / parallax_width) + 1 #+1 come buffer
@@ -121,11 +139,11 @@ def draw_parallax():
             window_surface.blit(parallax_sprites[i], ((w * parallax_width) + speed_scroll_parallax[i], 0))
 
 def draw_parallax_front_layer():
-    speed_scroll_parallax[5] -= scroll_speeds[5]
-    if abs(speed_scroll_parallax[5]) >= parallax_width:
-        speed_scroll_parallax[5] = 0
+    speed_scroll_parallax[parallax_layer_number - 1] -= scroll_speeds[parallax_layer_number - 1]
+    if abs(speed_scroll_parallax[parallax_layer_number - 1]) >= parallax_width:
+        speed_scroll_parallax[parallax_layer_number - 1] = 0
     for w in range(0, tiles):
-            window_surface.blit(parallax_sprites[5], ((w * parallax_width) + speed_scroll_parallax[5], 0))
+            window_surface.blit(parallax_sprites[parallax_layer_number - 1], ((w * parallax_width) + speed_scroll_parallax[parallax_layer_number - 1], 0))
 
 
 '''disegno nel group my sprites'''
