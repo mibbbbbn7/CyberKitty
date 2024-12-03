@@ -61,7 +61,9 @@ class Kitty(pygame.sprite.Sprite):
     
     def add_points(self, type):
         if type == "red_minion":
-            self.action_points += 100
+            self.action_points += 20
+        if type == "wizard":
+            self.action_points += 40
 
     def dash_timer(self):
         '''dash ready'''
