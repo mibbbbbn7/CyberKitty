@@ -35,6 +35,7 @@ import random
 import math
 import player_kitty
 import minion_enemy
+import wizard_enemy
 import dust
 import time
 
@@ -52,6 +53,11 @@ pygame.display.set_caption("AntiKitty")
 clock = pygame.time.Clock()
 #===========================================
 '''imports'''
+death_sprites = []
+for i in range(0, 8):
+    death_sprite = pygame.image.load(os.path.join("data", "enemy_death", f"death2{i}.png")).convert_alpha()
+    death_sprite = pygame.transform.scale(death_sprite, (128, 128))
+    death_sprites.append(death_sprite)
 
 red_minion_sprites = [] #1100/4=27.5
 for i in range(0, 4): #import flying
@@ -74,17 +80,22 @@ for i in range(0, 4): #import attack damage
     minion_sprite = pygame.transform.scale(minion_sprite, (112, 96))
     red_minion_sprites.append(minion_sprite)
 
-red_minion_death_sprites = []
-#animation of the packet
-#for i in range(0, 5):
-#    red_minion_death_sprite = pygame.image.load(os.path.join("data", "minion_red_death", f"death1{i}.png")).convert_alpha()
-#    red_minion_death_sprite = pygame.transform.scale(red_minion_death_sprite, (112, 96))
-#    red_minion_death_sprites.append(red_minion_death_sprite)
-#-----circle explosion animation
-for i in range(0, 8):
-    red_minion_death_sprite = pygame.image.load(os.path.join("data", "minion_red_death", f"death2{i}.png")).convert_alpha()
-    red_minion_death_sprite = pygame.transform.scale(red_minion_death_sprite, (128, 128))
-    red_minion_death_sprites.append(red_minion_death_sprite)
+wizard_sprites = []
+for i in range(0, 4): #import flying
+    wizard_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "wizard", "flying",f"flying{i}.png")).convert_alpha(), (136, 92))
+    wizard_sprites.append(wizard_sprite)
+
+for i in range(0, 4): #import attack
+    wizard_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "wizard", "attack",f"attack{i}.png")).convert_alpha(), (56, 92))
+    wizard_sprites.append(wizard_sprite)
+
+for i in range(0, 4): #import flying damage
+    wizard_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "wizard", "flying",f"flying{i}dmg.png")).convert_alpha(), (136, 92))
+    wizard_sprites.append(wizard_sprite)
+
+for i in range(0, 4): #import attack damage
+    wizard_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "wizard", "attack",f"attack{i}dmg.png")).convert_alpha(), (56, 92))
+    wizard_sprites.append(wizard_sprite)
   
 fireball_sprites = []
 for i in range(0, 3):
@@ -102,6 +113,12 @@ dust_sprites = []
 for i in range(0, 4):
     dust_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "dust", f"dust{i}.png")).convert_alpha(), (32, 32))
     dust_sprites.append(dust_sprite)
+
+
+spell_sprites = []
+for i in range(0, 3):
+    spell_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "spell", f"spell{i}.png")).convert_alpha(), (28, 20))
+    spell_sprites.append(spell_sprite)
 
 kitty_sprites = [] #1100/4=27.5
 for i in range(0, 4):
@@ -167,15 +184,24 @@ def draw_parallax_front_layer():
 my_sprites = pygame.sprite.Group()
 my_bullets = pygame.sprite.Group()
 my_fireballs = pygame.sprite.Group()
-dust_from_kitty_event = pygame.event.custom_type()
-pygame.time.set_timer(dust_from_kitty_event, 180)
+my_minions = pygame.sprite.Group()
+my_spells = pygame.sprite.Group()
+my_wizards = pygame.sprite.Group()
+my_enemies_hittable = pygame.sprite.Group()  #gruppo per fare il collision con player e heart bullets
+my_enemies_non_hittable = pygame.sprite.Group()
+my_wizards = pygame.sprite.Group()
 kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets, fire_sprites) #per argomenti vedi definizione Kitty in player_kitty
 
 
 
-my_minions = pygame.sprite.Group()
 minion_spawn_event = pygame.event.custom_type()
 pygame.time.set_timer(minion_spawn_event, 3500)
+
+wizard_spawn_event = pygame.event.custom_type()
+pygame.time.set_timer(wizard_spawn_event, 4000)
+
+dust_from_kitty_event = pygame.event.custom_type()
+pygame.time.set_timer(dust_from_kitty_event, 180)
 
 '''game systems'''
 points_tot = 0
@@ -183,20 +209,19 @@ points_from_time = 0
 points_from_actions = 0
 
 def collisions():
-    if pygame.sprite.spritecollide(kitty, my_minions, True, pygame.sprite.collide_mask):
+    if pygame.sprite.spritecollide(kitty, my_enemies_hittable, True, pygame.sprite.collide_mask):
+        print("Kitty minion hit")
+        kitty.get_damage()
+    
+    if pygame.sprite.spritecollide(kitty, my_enemies_non_hittable, True, pygame.sprite.collide_mask):
         print("Kitty minion hit")
         kitty.get_damage()
       
-    for minion in pygame.sprite.Group.sprites(my_minions):
-        if (pygame.sprite.spritecollide(minion, my_bullets, True)):
-            minion.hit()
-            if minion.health <= 0:
-                kitty.add_ten_points()
-        
-        
-    if pygame.sprite.spritecollide(kitty, my_fireballs, True, pygame.sprite.collide_mask):
-        print("Kitty fireball hit")
-        kitty.get_damage()
+    for enemy in pygame.sprite.Group.sprites(my_enemies_hittable):
+        if (pygame.sprite.spritecollide(enemy, my_bullets, True)):
+            enemy.hit()
+            if enemy.health <= 0:
+                kitty.add_points(enemy.type)
         
 def show_points():
     points_text = font_pixel.render(f"{points_tot}", False, (255, 255, 255))
@@ -204,7 +229,7 @@ def show_points():
 
 def show_minion_health():
     for minion in pygame.sprite.Group.sprites(my_minions):
-        minion_health = font_pixel.render(f"{minion.get_minion_health()}", False, (255, 255, 255))
+        minion_health = font_pixel.render(f"{minion.get_health()}", False, (255, 255, 255))
         window_surface.blit(minion_health, (minion.rect.centerx - 27, minion.rect.centery - 50))
 
 def show_kitty_health():
@@ -241,7 +266,9 @@ while execute:
             if event.key == pygame.K_1:
                 execute = False
         if event.type == minion_spawn_event:
-            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(150, window_height - 200)), red_minion_death_sprites, my_sprites, fireball_sprites, my_fireballs, window_width)
+            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, fireball_sprites, my_fireballs, my_enemies_non_hittable, window_width)
+        if event.type == wizard_spawn_event:
+            wizard_enemy.Wizard(wizard_sprites, (my_sprites, my_wizards, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, my_spells, spell_sprites, my_enemies_hittable, window_width)
         if event.type == dust_from_kitty_event:
             dust.Dust(dust_sprites, kitty.get_bottomleft(), my_sprites)
     '''screen'''
