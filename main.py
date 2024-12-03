@@ -53,22 +53,38 @@ clock = pygame.time.Clock()
 '''imports'''
 
 red_minion_sprites = [] #1100/4=27.5
-for i in range(0, 4):
+for i in range(0, 4): #import flying
     minion_sprite = pygame.image.load(os.path.join("data", "minion_red", "flying", f"flying{i}.png")).convert_alpha()
     minion_sprite = pygame.transform.scale(minion_sprite, (112, 96))
     red_minion_sprites.append(minion_sprite)
 
-for i in range(0, 4):
+for i in range(0, 4): #import attack
     minion_sprite = pygame.image.load(os.path.join("data", "minion_red", "attack", f"attack{i}.png")).convert_alpha()
     minion_sprite = pygame.transform.scale(minion_sprite, (112, 96))
     red_minion_sprites.append(minion_sprite)
 
-red_minion_death_sprites = []
-for i in range(0, 5):
-    red_minion_death_sprite = pygame.image.load(os.path.join("data", "minion_red_death", f"death{i}.png")).convert_alpha()
-    red_minion_death_sprite = pygame.transform.scale(red_minion_death_sprite, (112, 96))
-    red_minion_death_sprites.append(red_minion_death_sprite)
+for i in range(0, 4): #import flying damage
+    minion_sprite = pygame.image.load(os.path.join("data", "minion_red", "flying", f"flying{i}dmg.png")).convert_alpha()
+    minion_sprite = pygame.transform.scale(minion_sprite, (112, 96))
+    red_minion_sprites.append(minion_sprite)
 
+for i in range(0, 4): #import attack damage
+    minion_sprite = pygame.image.load(os.path.join("data", "minion_red", "attack", f"attack{i}dmg.png")).convert_alpha()
+    minion_sprite = pygame.transform.scale(minion_sprite, (112, 96))
+    red_minion_sprites.append(minion_sprite)
+
+red_minion_death_sprites = []
+#animation of the packet
+#for i in range(0, 5):
+#    red_minion_death_sprite = pygame.image.load(os.path.join("data", "minion_red_death", f"death1{i}.png")).convert_alpha()
+#    red_minion_death_sprite = pygame.transform.scale(red_minion_death_sprite, (112, 96))
+#    red_minion_death_sprites.append(red_minion_death_sprite)
+#-----circle explosion animation
+for i in range(0, 8):
+    red_minion_death_sprite = pygame.image.load(os.path.join("data", "minion_red_death", f"death2{i}.png")).convert_alpha()
+    red_minion_death_sprite = pygame.transform.scale(red_minion_death_sprite, (128, 128))
+    red_minion_death_sprites.append(red_minion_death_sprite)
+  
 fireball_sprites = []
 for i in range(0, 3):
     fireball_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "fireball", f"fireball{i}.png")).convert_alpha(), (20, 20))
@@ -181,8 +197,6 @@ def collisions():
         print("Kitty fireball hit")
         kitty.get_damage()
         
-
-
 def show_points():
     points_text = font_pixel.render(f"{points_tot}", False, (255, 255, 255))
     window_surface.blit(points_text, (100, window_height - 100))
@@ -223,7 +237,7 @@ while execute:
     '''events'''
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_1:     #chiude quando pigio (1)
+            if event.key == pygame.K_1:
                 execute = False
         if event.type == minion_spawn_event:
             minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(150, window_height - 200)), red_minion_death_sprites, my_sprites, fireball_sprites, my_fireballs)

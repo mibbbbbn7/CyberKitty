@@ -37,6 +37,7 @@ class Minion(pygame.sprite.Sprite):
         if self.health <= 0:
             self.kill()
             death_minion.Death_minion(self.rect.midleft, self.death_images, self.my_sprite_blit_group)
+        self.image = self.images[self.seconds_from_last_frame + 8]
     
     def get_minion_health(self):
         return self.health
@@ -90,9 +91,6 @@ class Minion(pygame.sprite.Sprite):
 
         if self.direction.x == 1.5:
             self.image = pygame.transform.flip(self.image, True, False)
-
-        if self.health == 2:
-            self.image = pygame.transform.grayscale(self.image)
         
         self.current_time = pygame.time.get_ticks()
         
