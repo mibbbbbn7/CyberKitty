@@ -18,17 +18,5 @@ class Death_minion(pygame.sprite.Sprite):
         self.seconds_from_last_frame = int ((pygame.time.get_ticks() - self.spawned_at_time) / 80 % 5)
         if self.seconds_from_last_frame == 4:
             self.kill()
-  
-#        if self.seconds_from_last_frame == 1:
-#            self.rect.x += self.seconds_from_last_frame
-#            self.rect.y -= self.seconds_from_last_frame
-#        elif self.seconds_from_last_frame == 2:
-#            self.rect.x += self.seconds_from_last_frame
-#            self.rect.y += self.seconds_from_last_frame
-#        elif self.seconds_from_last_frame == 3:
-#            self.rect.x -= self.seconds_from_last_frame
-#            self.rect.y += self.seconds_from_last_frame
-#        elif self.seconds_from_last_frame == 4:
-#            self.rect.x -= self.seconds_from_last_frame
-#            self.rect.y -= self.seconds_from_last_frame
+
         self.image = self.images[self.seconds_from_last_frame]

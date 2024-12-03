@@ -11,6 +11,7 @@ esportato in 128px (4x)
 '''
 | ======================== : TO DO LIST ANTIKITTY : ======================== |
 
+-   aggiungi hit kitty o bianco o tremolio
 -   aggiungi la scritta +10, +20, +30 alla morte del minion, senza questa non si capisce di aver guadagnato dei punti 
 -   ----------------------------------------------------------------------------CREA GRUPPO PER PROIETTILI DEI MINION
 -   ----------------------------------------------------------------------------aggiungi array di stati per gli sprite del minion
@@ -36,7 +37,7 @@ import player_kitty
 import minion_enemy
 import dust
 import time
-import points_system
+
 
 os.environ['SDL_VIDEO_CENTERD'] = '1'
 
@@ -119,17 +120,17 @@ parallax_sprites = [] #carico in una lista gli sprite del mio parallasse
 #    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "demon_woods", f"demon_woods1{i}.png")).convert_alpha(), (window_width, window_height))
 #    parallax_sprites.append(parallax_sprite)
 #---------industrial
-#for i in range(0, parallax_layer_number):
-#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "industrial", f"industrial1{i}.png")).convert_alpha(), (window_width, window_height))
-#    parallax_sprites.append(parallax_sprite)
-#---------night_forest
 for i in range(0, parallax_layer_number):
-    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "night_forest", f"night_forest1{i}.png")).convert_alpha(), (window_width, window_height))
+    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "industrial", f"industrial1{i}.png")).convert_alpha(), (window_width, window_height))
     parallax_sprites.append(parallax_sprite)
+#---------night_forest
+#for i in range(0, parallax_layer_number):
+#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "night_forest", f"night_forest1{i}.png")).convert_alpha(), (window_width, window_height))
+#    parallax_sprites.append(parallax_sprite)
 
 font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 30)
 
-antiKitty_txt = font_pixel.render('AntiKitty', False, (255, 255, 255)) #testo da scrivere, anti aliasing, colore
+antiKitty_txt = font_pixel.render('ANTI Kitty', False, (255, 255, 255)) #testo da scrivere, anti aliasing, colore
 
 
 '''blit di sfondo'''
@@ -240,7 +241,7 @@ while execute:
             if event.key == pygame.K_1:
                 execute = False
         if event.type == minion_spawn_event:
-            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(150, window_height - 200)), red_minion_death_sprites, my_sprites, fireball_sprites, my_fireballs)
+            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions), (window_width + 20), int(random.randint(150, window_height - 200)), red_minion_death_sprites, my_sprites, fireball_sprites, my_fireballs, window_width)
         if event.type == dust_from_kitty_event:
             dust.Dust(dust_sprites, kitty.get_bottomleft(), my_sprites)
     '''screen'''

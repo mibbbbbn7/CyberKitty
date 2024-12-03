@@ -2,14 +2,14 @@ import pygame
 import os
 import death_minion
 import fireball
-import points_system
+import random
 
 '''
 versione modificata di https://xzany.itch.io/flying-demon-2d-pixel-art
 '''
 
 class Minion(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, death_images, my_sprite_blit_group, fireball_images, my_fireball_group):
+    def __init__(self, images, groups, spawn_x, spawn_y, death_images, my_sprite_blit_group, fireball_images, my_fireball_group, window_w):
         super().__init__(groups) 
         self.images = images
         self.frame_image = 0
@@ -29,6 +29,7 @@ class Minion(pygame.sprite.Sprite):
         self.states = ["flying", "attack"]
         self.current_state = self.states[0]
         self.my_fireball_group = my_fireball_group
+        self.stop_at = random.randint(int(window_w/2), int(window_w - 100))
 
 
 
@@ -50,7 +51,7 @@ class Minion(pygame.sprite.Sprite):
 #        elif self.rect.centerx >= window_w :
 #            self.direction.x = -1
         
-        if self.rect.centerx <= window_w/2 + 200:
+        if self.rect.centerx <= self.stop_at:
             self.direction.x = 0
             self.current_state = self.states[1]
             if self.can_count_time:
