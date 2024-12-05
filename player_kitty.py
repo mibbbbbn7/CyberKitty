@@ -97,18 +97,16 @@ class Kitty(pygame.sprite.Sprite):
             self.is_dashing_call = True
             self.can_dash = False
             self.dash_time = pygame.time.get_ticks()
-            #self.is_dashing(seconds_from_last_frame)
-            #self.can_dash = False
-            #self.dash_time = pygame.time.get_ticks()
-        if not self.is_dashing_call:
+        if self.is_dashing_call: #animazione quando è piccolo
+            self.image = self.images[seconds_from_last_frame + 4]
+            self.rect = self.image.get_frect(center = (self.rect.centerx, self.rect.centery))
+            self.mask = pygame.mask.from_surface(self.image)
+            
+        if not self.is_dashing_call: #animazione quando è grande
             self.image = self.images[seconds_from_last_frame]
             self.rect = self.image.get_frect(center = (self.rect.centerx, self.rect.centery))
             self.mask = pygame.mask.from_surface(self.image)
 
-        if self.is_dashing_call:
-            self.image = self.images[seconds_from_last_frame + 4]
-            self.rect = self.image.get_frect(center = (self.rect.centerx, self.rect.centery))
-            self.mask = pygame.mask.from_surface(self.image)
 
         key = pygame.key.get_pressed()
             #kye[pygame.K_tasto] sono dei booleani quindi se li sommo in 

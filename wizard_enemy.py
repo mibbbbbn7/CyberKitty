@@ -15,7 +15,7 @@ class Wizard(pygame.sprite.Sprite):
         self.direction = pygame.Vector2(-1, 0)
         self.speed = 300
         self.spawned_at_time = pygame.time.get_ticks()
-        self.health = 10
+        self.health = 11
         self.mask = pygame.mask.from_surface(self.image)
         self.can_count_time = True
         self.can_fire = True

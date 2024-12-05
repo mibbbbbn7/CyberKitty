@@ -11,6 +11,10 @@ esportato in 128px (4x)
 '''
 | ======================== : TO DO LIST ANTIKITTY : ======================== |
 
+-   aggiungi level system, forse:
+        menu = 0
+        level = intero
+        transizione = intero +0.5
 -   aggiungi hit kitty o bianco o tremolio
 -   aggiungi la scritta +10, +20, +30 alla morte del minion, senza questa non si capisce di aver guadagnato dei punti 
 -   ----------------------------------------------------------------------------CREA GRUPPO PER PROIETTILI DEI MINION
@@ -256,6 +260,7 @@ def render_text():
 
 
 execute = True
+level = 1
 #==================================================================================================
 
 pygame.mouse.set_visible(False)
@@ -265,6 +270,9 @@ while execute:
     for spell in pygame.sprite.Group.sprites(my_spells):
         spell.get_kitty_x(kitty.get_x())
         spell.get_kitty_y(kitty.get_y())
+    '''levels'''
+    if points_tot > 500 : level = 2 
+    if points_tot > 800 : level = 3 
     '''events'''
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -274,8 +282,10 @@ while execute:
             dust.Dust(dust_sprites, kitty.get_bottomleft(), my_sprites)
         if event.type == minion_spawn_event:
             minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, fireball_sprites, my_fireballs, my_enemies_non_hittable, window_width)
-        if event.type == wizard_spawn_event and points_tot > 500:
-        #if event.type == wizard_spawn_event:
+            random_secondo_minion = random.randint(0,1)
+            if random_secondo_minion and level >= 2: #se random_secondo spawna anche un secondo minion
+                minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, fireball_sprites, my_fireballs, my_enemies_non_hittable, window_width)
+        if event.type == wizard_spawn_event :
             wizard_enemy.Wizard(wizard_sprites, (my_sprites, my_wizards, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, my_spells, spell_sprites, my_enemies_hittable, window_width)
     '''screen'''
     draw_parallax()
