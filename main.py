@@ -125,6 +125,8 @@ for i in range(0, 4):
     kitty_sprite = pygame.image.load(os.path.join("data", "kitty", "no_contour", f"kittyx{i}.png")).convert_alpha()
     kitty_sprite = pygame.transform.scale(kitty_sprite, (112, 96))
     kitty_sprites.append(kitty_sprite)
+for i in range (0,4):
+    kitty_sprites.append(pygame.transform.scale(pygame.image.load(os.path.join("data", "kitty", "no_contour", f"mini_kittyx{i}.png")).convert_alpha(), (56, 48)))
 
 parallax_layer_number = 5
 parallax_sprites = [] #carico in una lista gli sprite del mio parallasse
@@ -137,13 +139,13 @@ parallax_sprites = [] #carico in una lista gli sprite del mio parallasse
 #    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "demon_woods", f"demon_woods1{i}.png")).convert_alpha(), (window_width, window_height))
 #    parallax_sprites.append(parallax_sprite)
 #---------industrial
-for i in range(0, parallax_layer_number):
-    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "industrial", f"industrial1{i}.png")).convert_alpha(), (window_width, window_height))
-    parallax_sprites.append(parallax_sprite)
-#---------night_forest
 #for i in range(0, parallax_layer_number):
-#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "night_forest", f"night_forest1{i}.png")).convert_alpha(), (window_width, window_height))
+#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "industrial", f"industrial1{i}.png")).convert_alpha(), (window_width, window_height))
 #    parallax_sprites.append(parallax_sprite)
+#---------night_forest
+for i in range(0, parallax_layer_number):
+    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "night_forest", f"night_forest1{i}.png")).convert_alpha(), (window_width, window_height))
+    parallax_sprites.append(parallax_sprite)
 
 font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 30)
 
@@ -260,17 +262,21 @@ pygame.mouse.set_visible(False)
 while execute:
     dt = clock.tick(60) / 1000 # DELTA TIME, 60 fps
     time_from_start = pygame.time.get_ticks()
+    for spell in pygame.sprite.Group.sprites(my_spells):
+        spell.get_kitty_x(kitty.get_x())
+        spell.get_kitty_y(kitty.get_y())
     '''events'''
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_1:
                 execute = False
-        if event.type == minion_spawn_event:
-            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, fireball_sprites, my_fireballs, my_enemies_non_hittable, window_width)
-        if event.type == wizard_spawn_event:
-            wizard_enemy.Wizard(wizard_sprites, (my_sprites, my_wizards, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, my_spells, spell_sprites, my_enemies_hittable, window_width)
         if event.type == dust_from_kitty_event:
             dust.Dust(dust_sprites, kitty.get_bottomleft(), my_sprites)
+        if event.type == minion_spawn_event:
+            minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, fireball_sprites, my_fireballs, my_enemies_non_hittable, window_width)
+        if event.type == wizard_spawn_event and points_tot > 500:
+        #if event.type == wizard_spawn_event:
+            wizard_enemy.Wizard(wizard_sprites, (my_sprites, my_wizards, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, my_spells, spell_sprites, my_enemies_hittable, window_width)
     '''screen'''
     draw_parallax()
     my_sprites.update(dt, window_width, window_height)

@@ -1,1 +1,1 @@
-window_surface.blit(kitty_health, (kitty.rect.centerx - 27, kitty.rect.centery - 80))
+print

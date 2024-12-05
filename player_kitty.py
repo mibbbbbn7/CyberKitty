@@ -35,7 +35,8 @@ class Kitty(pygame.sprite.Sprite):
         #dash cool down
         self.can_dash = True
         self.dash_time = 0
-        self.dash_cooldown = 5000
+        self.dash_cooldown = 3000
+        self.is_dashing_call = False
 
         #fire cool down
         self.can_fire = True
@@ -59,6 +60,12 @@ class Kitty(pygame.sprite.Sprite):
     def get_action_points(self):
         return self.action_points
     
+    def get_x(self):
+        return self.rect.centerx
+    
+    def get_y(self):
+        return self.rect.centery
+    
     def add_points(self, type):
         if type == "red_minion":
             self.action_points += 20
@@ -66,11 +73,12 @@ class Kitty(pygame.sprite.Sprite):
             self.action_points += 40
 
     def dash_timer(self):
-        '''dash ready'''
+        #scandisce la velocita con cui il player può sparare
         if not self.can_dash:
-            current_time = pygame.time.get_ticks() #millisecondi passati dall'avvio del gioco
+            current_time = pygame.time.get_ticks()
             if current_time - self.dash_time >= self.dash_cooldown:
                 self.can_dash = True
+                self.is_dashing_call = False
 
     def fire_timer(self):
         #scandisce la velocita con cui il player può sparare
@@ -84,17 +92,29 @@ class Kitty(pygame.sprite.Sprite):
 
     def update(self, delta_t, window_w, window_h):
         
-        
         seconds_from_last_frame = int (pygame.time.get_ticks() / 120 % 4)
+        if pygame.key.get_pressed()[pygame.K_p] and self.can_dash and not self.is_dashing_call:
+            self.is_dashing_call = True
+            self.can_dash = False
+            self.dash_time = pygame.time.get_ticks()
+            #self.is_dashing(seconds_from_last_frame)
+            #self.can_dash = False
+            #self.dash_time = pygame.time.get_ticks()
+        if not self.is_dashing_call:
+            self.image = self.images[seconds_from_last_frame]
+            self.rect = self.image.get_frect(center = (self.rect.centerx, self.rect.centery))
+            self.mask = pygame.mask.from_surface(self.image)
 
-        self.image = self.images[seconds_from_last_frame]
+        if self.is_dashing_call:
+            self.image = self.images[seconds_from_last_frame + 4]
+            self.rect = self.image.get_frect(center = (self.rect.centerx, self.rect.centery))
+            self.mask = pygame.mask.from_surface(self.image)
 
+        key = pygame.key.get_pressed()
             #kye[pygame.K_tasto] sono dei booleani quindi se li sommo in 
             #questo modo trasformati in int mi danno la direzione corrette,
             #inoltre quando i tasti non sono premuti assumono False che è 0
             #percio il player se ne ritorna con la direction x e/o y a 0 :D
-        key = pygame.key.get_pressed()
-
         self.direction.x = int(key[pygame.K_d]) - int(key[pygame.K_a])
         self.direction.y = int(key[pygame.K_s]) - int(key[pygame.K_w])
 
@@ -119,16 +139,11 @@ class Kitty(pygame.sprite.Sprite):
     
         '''fire'''
 
-        if pygame.key.get_pressed()[pygame.K_k] and self.can_fire:
+        if pygame.key.get_pressed()[pygame.K_k] and self.can_fire and not self.is_dashing_call:
             fire.Fire(self.fire_images, self.rect.midright, self.gruppo)
             bullet_heart.Bullet_heart(self.bullet_heart_image, (self.gruppo, self.my_bullets), self.rect.midright)
             self.can_fire = False
             self.fire_time = pygame.time.get_ticks()
-
-        '''dash'''
-        if pygame.key.get_pressed()[pygame.K_e] and self.can_dash:
-            self.can_dash = False
-            self.dash_time = pygame.time.get_ticks()
         
         self.dash_timer()
         self.fire_timer()
