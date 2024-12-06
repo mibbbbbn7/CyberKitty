@@ -11,12 +11,16 @@ esportato in 128px (4x)
 '''
 | ======================== : TO DO LIST ANTIKITTY : ======================== |
 
+prova a runnare su computer di pao
+
 -   aggiungi level system, forse:
         menu = 0
         level = intero
         transizione = intero +0.5
 -   aggiungi hit kitty o bianco o tremolio
+-   quando shrink ahhiungere mini esplosione
 -   aggiungi la scritta +10, +20, +30 alla morte del minion, senza questa non si capisce di aver guadagnato dei punti 
+-   aggiungi dash rapido relativo al tasto premuto
 -   ----------------------------------------------------------------------------CREA GRUPPO PER PROIETTILI DEI MINION
 -   ----------------------------------------------------------------------------aggiungi array di stati per gli sprite del minion
 -   ----------------------------------------------------------------------------aggiungi scintille quando il player spara
@@ -121,7 +125,7 @@ for i in range(0, 4):
 
 spell_sprites = []
 for i in range(0, 3):
-    spell_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "spell", f"spell{i}.png")).convert_alpha(), (28, 20))
+    spell_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "spell", f"spell{i}.png")).convert_alpha(), (20, 20))
     spell_sprites.append(spell_sprite)
 
 kitty_sprites = [] #1100/4=27.5
@@ -254,7 +258,7 @@ def show_general_text():
 def render_text():
     show_kitty_health()
     show_general_text()
-    show_minion_health()
+    #show_minion_health()
     show_points()
 
 

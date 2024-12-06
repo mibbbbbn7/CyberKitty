@@ -32,16 +32,21 @@ class Kitty(pygame.sprite.Sprite):
         self.health = 6
         self.gruppo = groups
 
-        #dash cool down
-        self.can_dash = True
-        self.dash_time = 0
-        self.dash_cooldown = 3000
-        self.is_dashing_call = False
+        #shrink cool down
+        self.can_shrink = True
+        self.shrink_time = 0
+        self.shrink_cooldown = 1000
+        self.is_shrinking_call = False
 
         #fire cool down
         self.can_fire = True
         self.fire_time = 0
         self.fire_cooldown = 100
+
+        #dash cool down
+        self.can_dash = True
+        self.dash_time = 0
+        self.dash_cooldown = 3000
 
         self.bullet_heart_image = bullet_heart_image
         self.my_bullets = my_bullets
@@ -72,13 +77,15 @@ class Kitty(pygame.sprite.Sprite):
         if type == "wizard":
             self.action_points += 40
 
-    def dash_timer(self):
+    def shrink_timer(self):
         #scandisce la velocita con cui il player può sparare
-        if not self.can_dash:
+        if not self.can_shrink:
+            self.speed = 900
             current_time = pygame.time.get_ticks()
-            if current_time - self.dash_time >= self.dash_cooldown:
-                self.can_dash = True
-                self.is_dashing_call = False
+            if current_time - self.shrink_time >= self.shrink_cooldown:
+                self.can_shrink = True
+                self.is_shrinking_call = False
+                self.speed = 700
 
     def fire_timer(self):
         #scandisce la velocita con cui il player può sparare
@@ -87,27 +94,33 @@ class Kitty(pygame.sprite.Sprite):
             if current_time - self.fire_time >= self.fire_cooldown:
                 self.can_fire = True
 
+    def dash_timer(self):
+        #scandisce la velocita con cui il player può sparare
+        if not self.can_dash:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.dash_time >= self.dash_cooldown:
+                self.can_dash = True
+
     def get_bottomleft(self):
         return self.rect.bottomleft
 
     def update(self, delta_t, window_w, window_h):
-        
+        '''animation and definition of shrink or normal'''
         seconds_from_last_frame = int (pygame.time.get_ticks() / 120 % 4)
-        if pygame.key.get_pressed()[pygame.K_p] and self.can_dash and not self.is_dashing_call:
-            self.is_dashing_call = True
-            self.can_dash = False
-            self.dash_time = pygame.time.get_ticks()
-        if self.is_dashing_call: #animazione quando è piccolo
+        if pygame.key.get_pressed()[pygame.K_p] and self.can_shrink and not self.is_shrinking_call:
+            self.is_shrinking_call = True
+            self.can_shrink = False
+            self.shrink_time = pygame.time.get_ticks()
+        if self.is_shrinking_call: #animazione quando è piccolo
             self.image = self.images[seconds_from_last_frame + 4]
             self.rect = self.image.get_frect(center = (self.rect.centerx, self.rect.centery))
             self.mask = pygame.mask.from_surface(self.image)
-            
-        if not self.is_dashing_call: #animazione quando è grande
+        if not self.is_shrinking_call: #animazione quando è grande
             self.image = self.images[seconds_from_last_frame]
             self.rect = self.image.get_frect(center = (self.rect.centerx, self.rect.centery))
             self.mask = pygame.mask.from_surface(self.image)
 
-
+        '''movement'''
         key = pygame.key.get_pressed()
             #kye[pygame.K_tasto] sono dei booleani quindi se li sommo in 
             #questo modo trasformati in int mi danno la direzione corrette,
@@ -136,12 +149,19 @@ class Kitty(pygame.sprite.Sprite):
         self.rect.center += self.direction * self.speed * delta_t
     
         '''fire'''
-
-        if pygame.key.get_pressed()[pygame.K_k] and self.can_fire and not self.is_dashing_call:
+        if pygame.key.get_pressed()[pygame.K_k] and self.can_fire and not self.is_shrinking_call:
             fire.Fire(self.fire_images, self.rect.midright, self.gruppo)
             bullet_heart.Bullet_heart(self.bullet_heart_image, (self.gruppo, self.my_bullets), self.rect.midright)
             self.can_fire = False
             self.fire_time = pygame.time.get_ticks()
         
+        '''dash'''
+        if pygame.key.get_pressed()[pygame.K_l] and self.can_dash and not self.is_shrinking_call:
+            self.can_fire = False
+            self.rect.centerx += 200
+            self.can_dash = False
+            self.dash_time = pygame.time.get_ticks()
+        
         self.dash_timer()
+        self.shrink_timer()
         self.fire_timer()

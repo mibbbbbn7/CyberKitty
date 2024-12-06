@@ -13,7 +13,7 @@ class Bullet_heart (pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = image
         self.kitty_rifle = pos
-        self.random_spawn_height = [pos[0], float(random.randint( int(pos[1] - 20), int(pos[1] + 20)))]
+        self.random_spawn_height = [pos[0], float(random.randint( int(pos[1] - 10), int(pos[1] + 10)))]
         self.rect = self.image.get_frect(midleft = self.random_spawn_height)
         self.creation_time = pygame.time.get_ticks()
         self.mask = pygame.mask.from_surface(self.image)

@@ -49,7 +49,7 @@ class Spell(pygame.sprite.Sprite):
         self.move()
         #gestisco velocita, senza l if che setta speed a 2 il proiettile in prossimita del player va trooppo lento
         if (self.kitty_x - self.rect.centerx < 0 and self.kitty_x - self.rect.centerx > -200) or (self.kitty_x - self.rect.centerx > 0 and self.kitty_x - self.rect.centerx < 200):
-            self.speed = 1.8
+            self.speed = 1.6
         else:
             self.speed = 1
         self.rect.center += self.direction * self.speed * delta_t
