@@ -13,6 +13,7 @@ esportato in 128px (4x)
 
 prova a runnare su computer di pao
 
+-   ridimensiona dash effect e aggiungi che la nube fa danno
 -   aggiungi level system, forse:
         menu = 0
         level = intero
@@ -61,6 +62,7 @@ pygame.display.set_caption("AntiKitty")
 clock = pygame.time.Clock()
 #===========================================
 '''imports'''
+#----------------enemys
 death_sprites = []
 for i in range(0, 8):
     death_sprite = pygame.image.load(os.path.join("data", "enemy_death", f"death2{i}.png")).convert_alpha()
@@ -110,6 +112,20 @@ for i in range(0, 3):
     fireball_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "fireball", f"fireball{i}.png")).convert_alpha(), (20, 20))
     fireball_sprites.append(fireball_sprite)
 
+spell_sprites = []
+for i in range(0, 3):
+    spell_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "spell", f"spell{i}.png")).convert_alpha(), (20, 20))
+    spell_sprites.append(spell_sprite)
+
+#----------------kitty
+kitty_sprites = [] #1100/4=27.5
+for i in range(0, 4):
+    kitty_sprite = pygame.image.load(os.path.join("data", "kitty", "no_contour", f"kittyx{i}.png")).convert_alpha()
+    kitty_sprite = pygame.transform.scale(kitty_sprite, (112, 96))
+    kitty_sprites.append(kitty_sprite)
+for i in range (0,4):
+    kitty_sprites.append(pygame.transform.scale(pygame.image.load(os.path.join("data", "kitty", "no_contour", f"mini_kittyx{i}.png")).convert_alpha(), (56, 48)))
+
 bullet_heart_image = pygame.transform.scale(pygame.image.load(os.path.join("data", "bullet", "bullet0.png")).convert_alpha(), (20, 20))
 
 fire_sprites = []
@@ -122,19 +138,12 @@ for i in range(0, 4):
     dust_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "dust", f"dust{i}.png")).convert_alpha(), (32, 32))
     dust_sprites.append(dust_sprite)
 
+dash_sprites = []
+for i in range(0, 8):
+    dash_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "dash", f"dash{i}.png")).convert_alpha(), (232, 232))
+    dash_sprites.append(dash_sprite)
 
-spell_sprites = []
-for i in range(0, 3):
-    spell_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "spell", f"spell{i}.png")).convert_alpha(), (20, 20))
-    spell_sprites.append(spell_sprite)
-
-kitty_sprites = [] #1100/4=27.5
-for i in range(0, 4):
-    kitty_sprite = pygame.image.load(os.path.join("data", "kitty", "no_contour", f"kittyx{i}.png")).convert_alpha()
-    kitty_sprite = pygame.transform.scale(kitty_sprite, (112, 96))
-    kitty_sprites.append(kitty_sprite)
-for i in range (0,4):
-    kitty_sprites.append(pygame.transform.scale(pygame.image.load(os.path.join("data", "kitty", "no_contour", f"mini_kittyx{i}.png")).convert_alpha(), (56, 48)))
+#----------------background
 
 parallax_layer_number = 5
 parallax_sprites = [] #carico in una lista gli sprite del mio parallasse
@@ -199,8 +208,8 @@ my_spells = pygame.sprite.Group()
 my_wizards = pygame.sprite.Group()
 my_enemies_hittable = pygame.sprite.Group()  #gruppo per fare il collision con player e heart bullets
 my_enemies_non_hittable = pygame.sprite.Group()
-my_wizards = pygame.sprite.Group()
-kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets, fire_sprites) #per argomenti vedi definizione Kitty in player_kitty
+
+kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets, fire_sprites, dash_sprites) #per argomenti vedi definizione Kitty in player_kitty
 
 
 
@@ -219,14 +228,21 @@ points_from_time = 0
 points_from_actions = 0
 
 def collisions():
-    if pygame.sprite.spritecollide(kitty, my_enemies_hittable, True, pygame.sprite.collide_mask):
-        print("Kitty minion hit")
-        kitty.get_damage()
+
+    for enemy in pygame.sprite.Group.sprites(my_enemies_hittable):
+        if pygame.sprite.collide_mask(enemy, kitty):
+            enemy.health = 0
+            enemy.hit()
+            kitty.get_damage()
+            kitty.add_points(enemy.type)
     
-    if pygame.sprite.spritecollide(kitty, my_enemies_non_hittable, True, pygame.sprite.collide_mask):
-        print("Kitty minion hit")
-        kitty.get_damage()
-      
+    for enemy in pygame.sprite.Group.sprites(my_enemies_non_hittable):
+        if pygame.sprite.collide_mask(enemy, kitty):
+            enemy.health = 0
+            enemy.hit()
+            kitty.get_damage()
+            kitty.add_points(enemy.type)
+
     for enemy in pygame.sprite.Group.sprites(my_enemies_hittable):
         if (pygame.sprite.spritecollide(enemy, my_bullets, True)):
             enemy.hit()

@@ -2,6 +2,7 @@ import pygame
 import os
 import bullet_heart
 import fire
+import dash
 
 #class Bullet_heart (pygame.sprite.Sprite):
 #    def __init__(self, image, groups, pos):
@@ -17,7 +18,7 @@ import fire
 
 
 class Kitty(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets, fire_images):
+    def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets, fire_images, dash_images):
         super().__init__(groups) #eredito da pygame.sprite.Sprite
  
         self.images = images
@@ -30,7 +31,7 @@ class Kitty(pygame.sprite.Sprite):
         self.direction = pygame.Vector2(0, 0)
         self.speed = 700 
         self.health = 6
-        self.gruppo = groups
+        self.group = groups
 
         #shrink cool down
         self.can_shrink = True
@@ -50,9 +51,9 @@ class Kitty(pygame.sprite.Sprite):
 
         self.bullet_heart_image = bullet_heart_image
         self.my_bullets = my_bullets
-
         self.fire_images = fire_images
- 
+        self.dash_images = dash_images
+
         self.mask = pygame.mask.from_surface(self.image)
         self.action_points = 0
         
@@ -150,15 +151,23 @@ class Kitty(pygame.sprite.Sprite):
     
         '''fire'''
         if pygame.key.get_pressed()[pygame.K_k] and self.can_fire and not self.is_shrinking_call:
-            fire.Fire(self.fire_images, self.rect.midright, self.gruppo)
-            bullet_heart.Bullet_heart(self.bullet_heart_image, (self.gruppo, self.my_bullets), self.rect.midright)
+            fire.Fire(self.fire_images, self.rect.midright, self.group)
+            bullet_heart.Bullet_heart(self.bullet_heart_image, (self.group, self.my_bullets), self.rect.midright)
             self.can_fire = False
             self.fire_time = pygame.time.get_ticks()
         
         '''dash'''
         if pygame.key.get_pressed()[pygame.K_l] and self.can_dash and not self.is_shrinking_call:
+            dash.Dash(self.dash_images, self.group, self.rect.center)
             self.can_fire = False
-            self.rect.centerx += 200
+            if pygame.key.get_pressed()[pygame.K_w]:
+                self.rect.centery -= 200
+            if pygame.key.get_pressed()[pygame.K_s]:
+                self.rect.centery += 200
+            if pygame.key.get_pressed()[pygame.K_a]:
+                self.rect.centerx -= 200
+            else:
+                self.rect.centerx += 200
             self.can_dash = False
             self.dash_time = pygame.time.get_ticks()
         

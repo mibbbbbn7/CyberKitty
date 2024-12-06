@@ -13,7 +13,10 @@ class Fire_ball(pygame.sprite.Sprite):
         self.rect.x += 22
         self.rect.y += 14
         self.spawned_at_time = pygame.time.get_ticks()
+        self.type = "fireball"
         
+    def hit(self):
+        self.kill()
 
     def update(self, delta_t, window_w, window_h):
         

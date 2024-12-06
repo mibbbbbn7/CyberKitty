@@ -25,6 +25,7 @@ class Spell(pygame.sprite.Sprite):
 
     def get_kitty_y(self, y):
         self.kitty_y = y
+        
     def hit(self):
         self.health -= 1
         if self.health <= 0:
