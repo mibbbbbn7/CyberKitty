@@ -1,3 +1,1 @@
-for enemy in pygame.sprite.Group.sprites(my_enemies_non_hittable):
-        if (pygame.sprite.spritecollide(enemy, my_dash_clouds, False)):
-            enemy.kill()
+pygame.draw.rect(window_surface, (255, 255, 255), bullet_num_rect.inflate(20, 30).move(-2, 0), 5, 10)

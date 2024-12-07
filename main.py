@@ -177,9 +177,9 @@ for i in range(0, parallax_layer_number):
 #    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "cyberpunk_night", f"{i}.png")).convert_alpha(), (window_width, window_height))
 #    parallax_sprites.append(parallax_sprite)
 
-font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 30)
+font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 40)
 
-antiKitty_txt = font_pixel.render('ANTI Kitty', False, (255, 255, 255)) #testo da scrivere, anti aliasing, colore
+antiKitty_txt = font_pixel.render('K    P   [   ]', False, (255, 255, 255)) #testo da scrivere, anti aliasing, colore
 
 '''imports sounds'''
 
@@ -288,7 +288,7 @@ def show_kitty_health():
     window_surface.blit(kitty_health, (kitty.rect.centerx - 27, kitty.rect.centery - 80))
 
 def show_general_text():
-    window_surface.blit(antiKitty_txt, (window_width/2 - 90, 10))
+    window_surface.blit(antiKitty_txt, (100, 10))
     number_of_bullets = len(my_bullets)
     bullet_num_txt = font_pixel.render(f"{number_of_bullets}", False, (255, 255, 255)) #testo da scrivere, anti aliasing, colore
     bullet_num_rect = bullet_num_txt.get_frect( midbottom = (window_width/2, 100))
