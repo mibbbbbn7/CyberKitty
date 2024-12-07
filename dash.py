@@ -10,6 +10,7 @@ class Dash(pygame.sprite.Sprite):
         self.pos = pos
         self.rect = self.image.get_frect(center = self.pos)
         self.spawned_at_time = pygame.time.get_ticks()
+        self.mask = pygame.mask.from_surface(self.image)
         
 
     def update(self, delta_t, window_w, window_h):

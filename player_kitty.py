@@ -18,7 +18,7 @@ import dash
 
 
 class Kitty(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets, fire_images, dash_images):
+    def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets, fire_images, dash_images, my_dash_clouds):
         super().__init__(groups) #eredito da pygame.sprite.Sprite
  
         self.images = images
@@ -47,12 +47,13 @@ class Kitty(pygame.sprite.Sprite):
         #dash cool down
         self.can_dash = True
         self.dash_time = 0
-        self.dash_cooldown = 3000
+        self.dash_cooldown = 2000
 
         self.bullet_heart_image = bullet_heart_image
         self.my_bullets = my_bullets
         self.fire_images = fire_images
         self.dash_images = dash_images
+        self.my_dash_clouds = my_dash_clouds
 
         self.mask = pygame.mask.from_surface(self.image)
         self.action_points = 0
@@ -157,7 +158,7 @@ class Kitty(pygame.sprite.Sprite):
             self.fire_time = pygame.time.get_ticks()
         
         '''dash'''
-        if pygame.key.get_pressed()[pygame.K_l] and self.can_dash and not self.is_shrinking_call:
+        if pygame.key.get_pressed()[pygame.K_SPACE] and self.can_dash and not self.is_shrinking_call:
             dash.Dash(self.dash_images, self.group, self.rect.center)
             self.can_fire = False
             if pygame.key.get_pressed()[pygame.K_w]:
@@ -170,6 +171,7 @@ class Kitty(pygame.sprite.Sprite):
                 self.rect.centerx += 200
             self.can_dash = False
             self.dash_time = pygame.time.get_ticks()
+            dash.Dash(self.dash_images, (self.group, self.my_dash_clouds), self.rect.center)
         
         self.dash_timer()
         self.shrink_timer()
