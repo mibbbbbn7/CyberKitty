@@ -5,7 +5,7 @@ import spell
 import random
 
 class Wizard(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, death_images, my_sprite_blit_group, my_spells_group, spell_images, my_enemies_hittable, window_w):
+    def __init__(self, images, groups, spawn_x, spawn_y, death_images, my_sprite_blit_group, my_spells_group, spell_images, my_enemies_hittable, window_w, font_pixel, window_surface):
         super().__init__(groups)
         self.type = "wizard"
         self.images = images
@@ -29,12 +29,14 @@ class Wizard(pygame.sprite.Sprite):
         self.my_spells_group = my_spells_group
         self.spell_images = spell_images
         self.my_enemies_hittable = my_enemies_hittable
+        self.font_pixel = font_pixel
+        self.window_surface = window_surface
 
     def hit(self):
         self.health -= 1
         if self.health <= 0:
             self.kill()
-            death_enemy.Death_minion(self.rect.midleft, self.death_images, self.my_sprite_blit_group)
+            death_enemy.Death_enemy(self.rect.midleft, self.death_images, self.my_sprite_blit_group, self.type, self.font_pixel, self.window_surface)
         self.image = self.images[self.seconds_from_last_frame + 8]#"<------------------- piu quanto?"
     
     def get_wizard_health(self):

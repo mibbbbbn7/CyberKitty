@@ -3,9 +3,10 @@ import os
 import death_enemy
 import fireball
 import random
+import life_point
 
 class Minion(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, death_images, my_sprite_blit_group, fireball_images, my_fireball_group, my_enemies_non_hittable , window_w):
+    def __init__(self, images, groups, spawn_x, spawn_y, death_images, my_sprite_blit_group, fireball_images, my_fireball_group, my_enemies_non_hittable , window_w, font_pixel, window_surface):
         super().__init__(groups)
         self.type = "red_minion"
         self.images = images
@@ -29,12 +30,16 @@ class Minion(pygame.sprite.Sprite):
         self.my_sprite_blit_group = my_sprite_blit_group #qua mi serve solo per passarlo a death minion 
         self.death_images = death_images
         self.fireball_images = fireball_images
+        self.font_pixel = font_pixel
+        self.window_surface = window_surface
+        
 
     def hit(self):
         self.health -= 1
         if self.health <= 0:
+            death_enemy.Death_enemy(self.rect.midleft, self.death_images, self.my_sprite_blit_group, self.type, self.font_pixel, self.window_surface)
             self.kill()
-            death_enemy.Death_minion(self.rect.midleft, self.death_images, self.my_sprite_blit_group)
+            
         self.image = self.images[self.seconds_from_last_frame + 8]
     
     def get_health(self):
@@ -42,12 +47,6 @@ class Minion(pygame.sprite.Sprite):
     
     def minion_move_and_shoot(self, delta_t, window_w, window_h):
         '''MOVIMENTO AVANTI E INDIETRO MAGARI RIUTILIZZA'''
-#        if self.rect.centerx <= (window_w / 2) :
-#            self.direction.x = 1
-#    
-#        elif self.rect.centerx >= window_w :
-#            self.direction.x = -1
-        
         if self.rect.centerx <= self.stop_at:
             self.direction.x = 0
             self.current_state = self.states[1]

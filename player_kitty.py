@@ -3,22 +3,13 @@ import os
 import bullet_heart
 import fire
 import dash
-
-#class Bullet_heart (pygame.sprite.Sprite):
-#    def __init__(self, image, groups, pos):
-#        super().__init__(groups)
-#        self.image = image
-#        self.rect = self.image.get_frect(midleft = pos)
-#    
-#    def update(self, delta_t, window_w, window_h):
-#        self.rect.centerx += 1700 * delta_t
-#        if self.rect.left > window_w:
-#            self.kill()
-
-
+import icon_button
+import player_kitty_death
+import player_kitty_hit
+import life_point
 
 class Kitty(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets, fire_images, dash_images, my_dash_clouds):
+    def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets, fire_images, dash_images, my_dash_clouds, icons_images, player_kitty_death_images, player_kitty_hit_images, life_point_images):
         super().__init__(groups) #eredito da pygame.sprite.Sprite
  
         self.images = images
@@ -31,13 +22,14 @@ class Kitty(pygame.sprite.Sprite):
         self.direction = pygame.Vector2(0, 0)
         self.speed = 700 
         self.health = 6
-        self.group = groups
+        self.groups = groups
 
         #shrink cool down
         self.can_shrink = True
         self.shrink_time = 0
-        self.shrink_cooldown = 1000
+        self.shrink_cooldown = 1500
         self.is_shrinking_call = False
+        self.for_next_shrink_cooldown = 5000
 
         #fire cool down
         self.can_fire = True
@@ -49,17 +41,34 @@ class Kitty(pygame.sprite.Sprite):
         self.dash_time = 0
         self.dash_cooldown = 2000
 
+
         self.bullet_heart_image = bullet_heart_image
         self.my_bullets = my_bullets
         self.fire_images = fire_images
         self.dash_images = dash_images
         self.my_dash_clouds = my_dash_clouds
+        self.icons_images = icons_images
+        self.player_kitty_hit_images = player_kitty_hit_images
+        self.player_kitty_death_images = player_kitty_death_images
+        self.life_point_images = life_point_images
 
         self.mask = pygame.mask.from_surface(self.image)
         self.action_points = 0
+
+        #life
+        self.life_points = []
+        for i in range(0, self.health):
+           self.life_points.append(life_point.Life_point((50 + i * 50, 720 - 50) ,self.life_point_images, self.groups, i))
+        
+        self.k_button = icon_button.Icon_button(self.icons_images, self.groups, (1280 - 96, 50), 0)
+        self.space_button = icon_button.Icon_button(self.icons_images, self.groups, (1280 - 224, 50), 2)
         
     def get_damage(self):
         self.health -= 1
+        self.life_points[self.health].kill()
+        player_kitty_hit.Player_kitty_hit(self.player_kitty_hit_images, self.groups)
+        if self.health <= 1:
+            player_kitty_death.Player_kitty_death(self.player_kitty_death_images, self.groups)
     
     def get_kitty_health(self):
         return self.health
@@ -80,14 +89,19 @@ class Kitty(pygame.sprite.Sprite):
             self.action_points += 40
 
     def shrink_timer(self):
-        #scandisce la velocita con cui il player può sparare
         if not self.can_shrink:
-            self.speed = 900
+            self.speed = 1000
             current_time = pygame.time.get_ticks()
             if current_time - self.shrink_time >= self.shrink_cooldown:
-                self.can_shrink = True
+                if self.is_shrinking_call : dash.Dash(self.dash_images, (self.groups, self.my_dash_clouds), self.rect.center)
                 self.is_shrinking_call = False
                 self.speed = 700
+    
+    def for_next_shrink_timer(self):
+        if not self.can_shrink:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.shrink_time >= self.for_next_shrink_cooldown:
+                self.can_shrink = True
 
     def fire_timer(self):
         #scandisce la velocita con cui il player può sparare
@@ -105,6 +119,17 @@ class Kitty(pygame.sprite.Sprite):
 
     def get_bottomleft(self):
         return self.rect.bottomleft
+    
+    def set_icon_buttons_state(self):
+        if self.can_shrink:
+            self.k_button.on()
+        else:
+            self.k_button.off()
+
+        if self.can_dash:
+            self.space_button.on()
+        else:
+            self.space_button.off()
 
     def update(self, delta_t, window_w, window_h):
         '''animation and definition of shrink or normal'''
@@ -151,15 +176,15 @@ class Kitty(pygame.sprite.Sprite):
         self.rect.center += self.direction * self.speed * delta_t
     
         '''fire'''
-        if pygame.key.get_pressed()[pygame.K_k] and self.can_fire and not self.is_shrinking_call:
-            fire.Fire(self.fire_images, self.rect.midright, self.group)
-            bullet_heart.Bullet_heart(self.bullet_heart_image, (self.group, self.my_bullets), self.rect.midright)
+        if pygame.key.get_pressed()[pygame.K_l] and self.can_fire and not self.is_shrinking_call:
+            fire.Fire(self.fire_images, self.rect.midright, self.groups)
+            bullet_heart.Bullet_heart(self.bullet_heart_image, (self.groups, self.my_bullets), self.rect.midright)
             self.can_fire = False
             self.fire_time = pygame.time.get_ticks()
         
         '''dash'''
         if pygame.key.get_pressed()[pygame.K_SPACE] and self.can_dash and not self.is_shrinking_call:
-            dash.Dash(self.dash_images, self.group, self.rect.center)
+            dash.Dash(self.dash_images, self.groups, self.rect.center)
             self.can_fire = False
             if pygame.key.get_pressed()[pygame.K_w]:
                 self.rect.centery -= 200
@@ -171,8 +196,11 @@ class Kitty(pygame.sprite.Sprite):
                 self.rect.centerx += 200
             self.can_dash = False
             self.dash_time = pygame.time.get_ticks()
-            dash.Dash(self.dash_images, (self.group, self.my_dash_clouds), self.rect.center)
+            dash.Dash(self.dash_images, (self.groups, self.my_dash_clouds), self.rect.center)
         
         self.dash_timer()
         self.shrink_timer()
+        self.for_next_shrink_timer()
         self.fire_timer()
+        self.set_icon_buttons_state()
+
