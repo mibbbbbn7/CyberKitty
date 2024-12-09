@@ -46,6 +46,7 @@ import minion_enemy
 import wizard_enemy
 import dust
 import black_flash
+import menu_button
 import time
 
 
@@ -166,6 +167,13 @@ for i in range(0, 2):
     icon_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "icons", f"{i}_off.png")).convert_alpha(), (64, 64))
     icon_sprites.append(icon_sprite)
 
+menu_sprites = []
+for i in range(2, 4):
+    icon_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "icons", f"{i}_on.png")).convert_alpha(), (620, 180))
+    menu_sprites.append(icon_sprite)
+    #icon_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "icons", f"{i}_off.png")).convert_alpha(), (620, 180))
+    #menu_sprites.append(icon_sprite)
+
 black_flash_sprites = []
 for i in range(0, 6):
     black_flash_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "black_flash", f"{i}.png")).convert_alpha(), (window_width, window_height))
@@ -252,9 +260,9 @@ my_enemies_hittable = pygame.sprite.Group()  #gruppo per fare il collision con p
 my_enemies_non_hittable = pygame.sprite.Group()
 my_dash_clouds = pygame.sprite.Group()
 
-kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (window_width / 2), (window_height / 2), bullet_heart_image, my_bullets, fire_sprites, dash_sprites, my_dash_clouds, icon_sprites, player_kitty_death_sprites, player_kitty_hit_sprites, life_point_sprites) #per argomenti vedi definizione Kitty in player_kitty
+kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (200), (window_height / 2), bullet_heart_image, my_bullets, fire_sprites, dash_sprites, my_dash_clouds, icon_sprites, player_kitty_death_sprites, player_kitty_hit_sprites, life_point_sprites) #per argomenti vedi definizione Kitty in player_kitty
 
-
+menu_button = menu_button.Menu_button((window_width / 2, window_height / 2 - 100), menu_sprites, (my_enemies_hittable, my_sprites))
 
 minion_spawn_event = pygame.event.custom_type()
 pygame.time.set_timer(minion_spawn_event, 3500)
@@ -265,7 +273,6 @@ pygame.time.set_timer(wizard_spawn_event, 4000)
 dust_from_kitty_event = pygame.event.custom_type()
 pygame.time.set_timer(dust_from_kitty_event, 180)
 
-print_added_points = pygame.event.custom_type()
 
 '''game systems'''
 points_tot = 0
@@ -322,6 +329,8 @@ def show_kitty_health():
     window_surface.blit(kitty_health, (kitty.rect.centerx - 27, kitty.rect.centery - 80))
 
 def show_general_text():
+    if level == 0:
+        antiKitty_txt = font_pixel.render('Cyber Kitty', False, (250, 242, 252))
     if level == 1:
         antiKitty_txt = font_pixel.render('Cyber Kitty lv 1', False, (250, 242, 252)) #testo da scrivere, anti aliasing, colore
     if level == 2:
@@ -330,6 +339,8 @@ def show_general_text():
         antiKitty_txt = font_pixel.render('Cyber Kitty lv 3', False, (250, 242, 252))
     if level == 4:
         antiKitty_txt = font_pixel.render('Cyber Kitty lv 4', False, (250, 242, 252))
+    if level == 777:
+        antiKitty_txt = font_pixel.render('Cyber Kitty   you lost', False, (250, 242, 252))
 
     window_surface.blit(antiKitty_txt, (100, 10))
     #number_of_bullets = len(my_bullets)
@@ -348,7 +359,7 @@ def render_text():
 
 
 execute = True
-level = 1
+level = 0
 #==================================================================================================
 '''new minion, new wizard'''
 
@@ -360,10 +371,6 @@ def new_wizard():
 
 '''levels'''
 def level1(event): #singolo minion
-    just_started = True
-    if just_started:
-        print("startes")
-        just_started = False
     if event.type == minion_spawn_event:
         new_minion()
 
@@ -397,37 +404,69 @@ def level4(event): #aggiunta di secondo wizard
 pygame.mouse.set_visible(False)
 while execute:
     dt = clock.tick(60) / 1000 # DELTA TIME, 60 fps
-    time_from_start = pygame.time.get_ticks()
-    for spell in pygame.sprite.Group.sprites(my_spells):
-        spell.get_kitty_x(kitty.get_x())
-        spell.get_kitty_y(kitty.get_y())
     '''levels'''
     previous_frame_level = level
+    if points_tot > 0 : level = 1 
     if points_tot > 500 : level = 2 
     if points_tot > 800 : level = 3
-    if points_tot > 1400 : level = 4 
+    if points_tot > 1400 : level = 4
+    if kitty.kitty_dead() : level = 777
     if level != previous_frame_level:
         black_flash.Black_flash(black_flash_sprites ,my_sprites)
-    '''events'''
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            execute = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_1:
+        
+    if level == 0:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 execute = False
-        if event.type == dust_from_kitty_event:
-            dust.Dust(dust_sprites, kitty.get_bottomleft(), my_sprites)
-        if event.type == print_added_points:
-            print("print added points")
-        if level == 1:
-            level1(event)
-        if level == 2:
-            level2(event)
-        if level == 3:
-            level3(event)
-        if level == 4:
-            level4(event)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    execute = False
+        points_from_actions = kitty.get_action_points()
+        points_tot = points_from_actions
+    if level >= 1 and level != 777:
+        time_from_start = pygame.time.get_ticks()
+        for spell in pygame.sprite.Group.sprites(my_spells):
+            spell.get_kitty_x(kitty.get_x())
+            spell.get_kitty_y(kitty.get_y())
+        '''events'''
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                execute = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    execute = False
+            if event.type == dust_from_kitty_event:
+                dust.Dust(dust_sprites, kitty.get_bottomleft(), my_sprites)
+            if level == 1:
+                level1(event)
+            if level == 2:
+                level2(event)
+            if level == 3:
+                level3(event)
+            if level == 4:
+                level4(event)
+        points_from_time = int(time_from_start / 100)
+        points_from_actions = kitty.get_action_points()
+        points_tot = points_from_time + points_from_actions
 
+    if level == 777:
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.type == pygame.QUIT:
+                    execute = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        execute = False
+        my_sprites.empty()
+        my_bullets.empty()
+        my_fireballs.empty()
+        my_minions.empty()
+        my_spells.empty()
+        my_wizards.empty()
+        my_enemies_hittable.empty()
+        my_enemies_non_hittable.empty()
+        my_dash_clouds.empty()
+                
     '''screen'''
     parallax_now = parallax_sprites_1 if level == 1 else parallax_sprites_2 if level < 4 else parallax_sprites_3
     draw_parallax(parallax_now)
@@ -437,10 +476,8 @@ while execute:
     draw_parallax_front_layer(parallax_now) 
     render_text()
     pygame.display.update()
+    print(level)
 
-    points_from_time = int(time_from_start / 100)
-    points_from_actions = kitty.get_action_points()
-    points_tot = points_from_time + points_from_actions
 
 pygame.QUIT
 

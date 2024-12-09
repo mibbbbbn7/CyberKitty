@@ -63,6 +63,12 @@ class Kitty(pygame.sprite.Sprite):
         self.k_button = icon_button.Icon_button(self.icons_images, self.groups, (1280 - 96, 50), 0)
         self.space_button = icon_button.Icon_button(self.icons_images, self.groups, (1280 - 224, 50), 2)
         
+    def kitty_dead(self):
+        if self.health <= 0:
+            self.kill()
+            return True
+        return False
+    
     def get_damage(self):
         self.health -= 1
         self.life_points[self.health].kill()
@@ -87,6 +93,8 @@ class Kitty(pygame.sprite.Sprite):
             self.action_points += 20
         if type == "wizard":
             self.action_points += 40
+        if type == "menu_button":
+            self.action_points += 1
 
     def shrink_timer(self):
         if not self.can_shrink:
@@ -203,4 +211,6 @@ class Kitty(pygame.sprite.Sprite):
         self.for_next_shrink_timer()
         self.fire_timer()
         self.set_icon_buttons_state()
+
+        
 
