@@ -47,11 +47,6 @@ class Wizard(pygame.sprite.Sprite):
     
     def wizard_move_and_shoot(self, delta_t, window_w, window_h):
         '''MOVIMENTO AVANTI E INDIETRO MAGARI RIUTILIZZA'''
-#        if self.rect.centerx <= (window_w / 2) :
-#            self.direction.x = 1
-#    
-#        elif self.rect.centerx >= window_w :
-#            self.direction.x = -1
         
         if self.rect.centerx <= self.stop_at:
             self.direction.x = 0

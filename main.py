@@ -1,7 +1,4 @@
 '''
-#VIDEO ARRIVATO A 3:31:00 ma guarda animazioni corrette a 5:04:00
-'''
-'''
 ====================================================================================
 sprite piskel nuvola 32px
 esportato in 128px (4x)
@@ -14,21 +11,21 @@ esportato in 128px (4x)
 prova a runnare su computer di pao
 
 -   ----------------------------------------------------------------------------ridimensiona dash effect e aggiungi che la nube fa danno
--   aggiungi level system, forse:
+-   ----------------------------------------------------------------------------aggiungi level system, forse:
         menu = 0
         level = intero
         transizione = intero +0.5
 -   ----------------------------------------------------------------------------aggiungi hit kitty o bianco o tremolio
--   quando shrink ahhiungere mini esplosione
+-   ----------------------------------------------------------------------------quando shrink ahhiungere mini esplosione
 -   ----------------------------------------------------------------------------aggiungi la scritta +10, +20, +30 alla morte del minion, senza questa non si capisce di aver guadagnato dei punti 
 -   ----------------------------------------------------------------------------aggiungi dash rapido relativo al tasto premuto
 -   ----------------------------------------------------------------------------CREA GRUPPO PER PROIETTILI DEI MINION
 -   ----------------------------------------------------------------------------aggiungi array di stati per gli sprite del minion
 -   ----------------------------------------------------------------------------aggiungi scintille quando il player spara
 -   ----------------------------------------------------------------------------aggiungi nuvolette dietro il player
--   cuore che indica energia +++ modifica bullet systema
+-   ----------------------------------------------------------------------------cuore che indica energia +++ modifica bullet systema
 -   ----------------------------------------------------------------------------rifai sprite pixel perfect
--   aggiungi suono
+-   ----------------------------------------------------------------------------aggiungi suono
 -   ----------------------------------------------------------------------------nemici che sparano
 -   ----------------------------------------------------------------------------nemici che sparano con colpi che inseguono
 -   ----------------------------------------------------------------------------rispetto al punteggi permetti spawn di nemici più forti, ex 0-100 minon | 100-200 minion, minion wizard | 200-300 minion, minion wizard, minion tank
@@ -47,11 +44,8 @@ import wizard_enemy
 import dust
 import black_flash
 import menu_button
-import time
-
 
 os.environ['SDL_VIDEO_CENTERD'] = '1'
-
 
 pygame.init()
 info = pygame.display.Info()
@@ -171,33 +165,13 @@ menu_sprites = []
 for i in range(2, 4):
     icon_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "icons", f"{i}_on.png")).convert_alpha(), (620, 180))
     menu_sprites.append(icon_sprite)
-    #icon_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "icons", f"{i}_off.png")).convert_alpha(), (620, 180))
-    #menu_sprites.append(icon_sprite)
 
 black_flash_sprites = []
 for i in range(0, 6):
     black_flash_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "black_flash", f"{i}.png")).convert_alpha(), (window_width, window_height))
     black_flash_sprites.append(black_flash_sprite)
-#----------------background
 
-#parallax_layer_number = 5
-#parallax_sprites = [] #carico in una lista gli sprite del mio parallasse
-#---------nuvola
-#for i in range(0, parallax_layer_number):
-#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "nuvola", f"nuvola1{i}.png")).convert_alpha(), (window_width, window_height))
-#    parallax_sprites.append(parallax_sprite)
-#---------demon_woods
-#for i in range(0, parallax_layer_number):
-#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "demon_woods", f"demon_woods1{i}.png")).convert_alpha(), (window_width, window_height))
-#    parallax_sprites.append(parallax_sprite)
-#---------industrial
-#for i in range(0, parallax_layer_number):
-#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "industrial", f"industrial1{i}.png")).convert_alpha(), (window_width, window_height))
-#    parallax_sprites.append(parallax_sprite)
-#---------night_forest
-#for i in range(0, parallax_layer_number):
-#    parallax_sprite = pygame.transform.scale(pygame.image.load(os.path.join("data", "background", "night_forest", f"night_forest1{i}.png")).convert_alpha(), (window_width, window_height))
-#    parallax_sprites.append(parallax_sprite)
+#----------------background
 
 parallax_layer_number = 5
 #---------cyberpunk_day
@@ -308,7 +282,8 @@ def collisions():
         if pygame.sprite.collide_mask(enemy, kitty):
             enemy.health = 0
             enemy.hit()
-            kitty.get_damage()
+            if enemy.type != "menu_button":
+                kitty.get_damage()
             kitty.add_points(enemy.type)
     
     for enemy in pygame.sprite.Group.sprites(my_enemies_non_hittable):
@@ -324,7 +299,6 @@ def collisions():
             if enemy.health <= 0:
                 kitty.add_points(enemy.type)
                 
-
 '''text'''
 
 font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 40)
@@ -354,13 +328,12 @@ def show_general_text():
     if level == 4:
         antiKitty_txt = font_pixel.render('Cyber Kitty lv 4', False, (250, 242, 252))
     if level == 777:
-        antiKitty_txt = font_pixel.render('Cyber Kitty   you lost', False, (250, 242, 252))
+        antiKitty_txt = font_pixel.render('Cyber Kitty  you lost', False, (250, 242, 252))
 
     window_surface.blit(antiKitty_txt, (100, 10))
     #number_of_bullets = len(my_bullets)
     #bullet_num_txt = font_pixel.render(f"{number_of_bullets}", False, (250, 242, 252)) #testo da scrivere, anti aliasing, colore
     #bullet_num_rect = bullet_num_txt.get_frect( midbottom = (window_width/2, 100))
-#
     #window_surface.blit(bullet_num_txt, bullet_num_rect) #testo da blittare, posizione
     #pygame.draw.rect(window_surface, (250, 242, 252), bullet_num_rect.inflate(20, 30).move(-2, 0), 5, 10)
 
@@ -487,7 +460,6 @@ while execute:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_1:
                         execute = False
-        
 
         my_sprites.empty()
         my_bullets.empty()
@@ -510,7 +482,6 @@ while execute:
     if level == 777:
         render_final_score(points_tot)
     pygame.display.update()
-
 
 pygame.QUIT
 

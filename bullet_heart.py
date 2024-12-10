@@ -2,12 +2,6 @@ import pygame
 import os
 import random
 
-'''
-    if (
-    len(pygame.sprite.Group.sprites(active_bullets))
-    >= settings.MAX_ACTIVE_BULLET_COUNT
-'''
-
 class Bullet_heart (pygame.sprite.Sprite):
     def __init__(self, image, groups, pos):
         super().__init__(groups)
@@ -21,9 +15,6 @@ class Bullet_heart (pygame.sprite.Sprite):
 
     def update(self, delta_t, window_w, window_h):
         self.rect.centerx += self.speed * delta_t
-        '''aggiungi energia: cuore che si riempe quando numero di bullet e prossimo a 0 e si svuota quando e prossimo a un tetto massimo da decidere'''
-        '''aggiungi un suono di cuore che si riempe'''
-        '''il codice cosi va bene, quando hitto i minion il cuore si andrebbe a riempire'''
         if self.rect.left > window_w + 30:
             self.kill()
        

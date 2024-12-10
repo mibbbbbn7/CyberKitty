@@ -1,5 +1,4 @@
 import pygame
-import os
 import bullet_heart
 import fire
 import dash
@@ -66,7 +65,6 @@ class Kitty(pygame.sprite.Sprite):
         
     def kitty_dead(self):
         if self.health <= 0:
-            self.kill()
             return True
         return False
     
@@ -78,6 +76,7 @@ class Kitty(pygame.sprite.Sprite):
         if self.health <= 1:
             player_kitty_death.Player_kitty_death(self.player_kitty_death_images, self.groups)
         if self.health <= 0:
+            self.kill()
             self.kitty_sounds[1].play()
     
     def get_kitty_health(self):
@@ -218,6 +217,3 @@ class Kitty(pygame.sprite.Sprite):
         self.for_next_shrink_timer()
         self.fire_timer()
         self.set_icon_buttons_state()
-
-        
-

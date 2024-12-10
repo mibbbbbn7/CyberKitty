@@ -1,6 +1,4 @@
 import pygame
-import random
-
 
 class Spell(pygame.sprite.Sprite):
     def __init__(self, images, groups, pos):

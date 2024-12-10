@@ -1,2 +1,1 @@
-
-'''levels'''
+kitty.add_points(enemy.type)
