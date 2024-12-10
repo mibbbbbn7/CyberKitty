@@ -328,7 +328,7 @@ def show_general_text():
     if level == 4:
         antiKitty_txt = font_pixel.render('Cyber Kitty lv 4', False, (250, 242, 252))
     if level == 777:
-        antiKitty_txt = font_pixel.render('Cyber Kitty  you lost', False, (250, 242, 252))
+        antiKitty_txt = font_pixel.render('Cyber Kitty  you lost\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n         press R to reset', False, (250, 242, 252))
 
     window_surface.blit(antiKitty_txt, (100, 10))
     #number_of_bullets = len(my_bullets)
@@ -364,6 +364,7 @@ def new_wizard():
      wizard_enemy.Wizard(wizard_sprites, (my_sprites, my_wizards, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, enemy_sounds, my_sprites, my_spells, spell_sprites, my_enemies_hittable, window_width, font_pixel, window_surface)
 
 '''levels'''
+
 def level1(event): #singolo minion
     if event.type == minion_spawn_event:
         new_minion()
@@ -453,14 +454,6 @@ while execute:
         points_tot = points_from_time + points_from_actions
 
     if level == 777:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.type == pygame.QUIT:
-                    execute = False
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_1:
-                        execute = False
-
         my_sprites.empty()
         my_bullets.empty()
         my_fireballs.empty()
@@ -470,6 +463,24 @@ while execute:
         my_enemies_hittable.empty()
         my_enemies_non_hittable.empty()
         my_dash_clouds.empty()
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.type == pygame.QUIT:
+                    execute = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        execute = False
+                    if event.key == pygame.K_r:
+                        level = 0
+                        kitty.__init__(kitty_sprites, my_sprites, (200), (window_height / 2), kitty_sounds, bullet_heart_image, my_bullets, fire_sprites, dash_sprites, my_dash_clouds, icon_sprites, player_kitty_death_sprites, player_kitty_hit_sprites, life_point_sprites)
+                        menu_button.__init__((window_width / 2, window_height / 2 - 100), menu_sprites, (my_enemies_hittable, my_sprites), kitty_sounds)
+                        music_lv1 = pygame.mixer.music.load(os.path.join("sfx", "music", "City of Backstreet_lv1.ogg"))
+                        pygame.mixer.music.play(-1)
+                        points_from_actions = 0
+                        points_from_time = 0
+                        points_tot = 0
+
         
     '''screen'''
     parallax_now = parallax_sprites_1 if level == 1 else parallax_sprites_2 if level < 4 else parallax_sprites_3
