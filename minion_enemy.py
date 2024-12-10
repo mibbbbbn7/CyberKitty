@@ -6,7 +6,7 @@ import random
 import life_point
 
 class Minion(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, death_images, my_sprite_blit_group, fireball_images, my_fireball_group, my_enemies_non_hittable , window_w, font_pixel, window_surface):
+    def __init__(self, images, groups, spawn_x, spawn_y, death_images, enemy_sounds, my_sprite_blit_group, fireball_images, my_fireball_group, my_enemies_non_hittable , window_w, font_pixel, window_surface):
         super().__init__(groups)
         self.type = "red_minion"
         self.images = images
@@ -24,6 +24,8 @@ class Minion(pygame.sprite.Sprite):
         self.states = ["flying", "attack"]
         self.current_state = self.states[0]
         self.stop_at = random.randint(int(window_w/2), int(window_w - 100))
+
+        self.enemy_sounds = enemy_sounds
         
         self.my_fireball_group = my_fireball_group
         self.my_enemies_non_hittable = my_enemies_non_hittable
@@ -36,7 +38,9 @@ class Minion(pygame.sprite.Sprite):
 
     def hit(self):
         self.health -= 1
+        pygame.mixer.Sound.play(self.enemy_sounds[0])
         if self.health <= 0:
+            pygame.mixer.Sound.play(self.enemy_sounds[1])
             death_enemy.Death_enemy(self.rect.midleft, self.death_images, self.my_sprite_blit_group, self.type, self.font_pixel, self.window_surface)
             self.kill()
             
@@ -56,6 +60,9 @@ class Minion(pygame.sprite.Sprite):
 
         if self.direction.x == 0:
             if self.image == self.images[5] and self.can_fire:
+                fireball_sound = pygame.mixer.Sound(self.enemy_sounds[2])
+                fireball_sound.play()
+                fireball_sound.set_volume(0.5)
                 fireball.Fire_ball(self.fireball_images,(self.my_sprite_blit_group, self.my_fireball_group, self.my_enemies_non_hittable), self.rect.midleft)
                 self.can_fire = False
             if self.image == self.images[7]:

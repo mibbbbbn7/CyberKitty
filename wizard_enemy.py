@@ -5,7 +5,7 @@ import spell
 import random
 
 class Wizard(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, death_images, my_sprite_blit_group, my_spells_group, spell_images, my_enemies_hittable, window_w, font_pixel, window_surface):
+    def __init__(self, images, groups, spawn_x, spawn_y, death_images, enemy_sounds,my_sprite_blit_group, my_spells_group, spell_images, my_enemies_hittable, window_w, font_pixel, window_surface):
         super().__init__(groups)
         self.type = "wizard"
         self.images = images
@@ -23,6 +23,7 @@ class Wizard(pygame.sprite.Sprite):
         self.states = ["flying", "attack"]
         self.current_state = self.states[0]
         self.stop_at = random.randint(int(window_w/2), int(window_w - 100))
+        self.enemy_sounds = enemy_sounds
 
         self.death_images = death_images
         self.my_sprite_blit_group = my_sprite_blit_group
@@ -34,7 +35,9 @@ class Wizard(pygame.sprite.Sprite):
 
     def hit(self):
         self.health -= 1
+        pygame.mixer.Sound.play(self.enemy_sounds[0])
         if self.health <= 0:
+            pygame.mixer.Sound.play(self.enemy_sounds[1])
             self.kill()
             death_enemy.Death_enemy(self.rect.midleft, self.death_images, self.my_sprite_blit_group, self.type, self.font_pixel, self.window_surface)
         self.image = self.images[self.seconds_from_last_frame + 8]#"<------------------- piu quanto?"
@@ -59,6 +62,9 @@ class Wizard(pygame.sprite.Sprite):
 
         if self.direction.x == 0:
             if self.image == self.images[5] and self.can_fire:
+                spell_sound = pygame.mixer.Sound(self.enemy_sounds[3])
+                spell_sound.play()
+                spell_sound.set_volume(0.5)
                 spell.Spell(self.spell_images,(self.my_sprite_blit_group, self.my_spells_group, self.my_enemies_hittable), self.rect.midleft)
                 self.can_fire = False
             if self.image == self.images[7]:

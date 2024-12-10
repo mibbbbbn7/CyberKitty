@@ -218,6 +218,19 @@ for i in range(0, parallax_layer_number):
 
 '''imports sounds'''
 
+kitty_sounds = []
+for i in range(0, 5):
+    kitty_sound = pygame.mixer.Sound(os.path.join("sfx", "sfx", "kitty_sounds", f"{i}.wav"))
+    kitty_sounds.append(kitty_sound)
+
+enemy_sounds = []
+for i in range(0, 4):
+    enemy_sound = pygame.mixer.Sound(os.path.join("sfx", "sfx", "enemy_sounds", f"{i}.wav"))
+    enemy_sounds.append(enemy_sound)
+
+music_lv1 = pygame.mixer.music.load(os.path.join("sfx", "music", "City of Backstreet_lv1.ogg"))
+pygame.mixer.music.set_volume(0.6)
+pygame.mixer.music.play(-1)
 
 '''blit di sfondo'''
 speed_scroll_parallax = []
@@ -232,14 +245,15 @@ parallax_width = parallax_sprites_1[0].get_width() #calcolo il numero di sprite 
 tiles = math.ceil(window_width / parallax_width) + 1 #+1 come buffer
 
 def draw_parallax(parallax_sprites):
+    key = pygame.key.get_pressed()
     for i in range(len(speed_scroll_parallax) - 1):
-        speed_scroll_parallax[i] -= scroll_speeds[i]
+        speed_scroll_parallax[i] -= scroll_speeds[i]  + (int(key[pygame.K_d]) + 1 - int(key[pygame.K_a]))
         if abs(speed_scroll_parallax[i]) >= parallax_width:
             speed_scroll_parallax[i] = 0
 
     for i in range(len(parallax_sprites) - 1):
         for w in range(0, tiles):
-            window_surface.blit(parallax_sprites[i], ((w * parallax_width) + speed_scroll_parallax[i], 0))
+            window_surface.blit(parallax_sprites[i], ((w * parallax_width ) + speed_scroll_parallax[i], 0))
 
 def draw_parallax_front_layer(parallax_sprites):
     speed_scroll_parallax[parallax_layer_number - 1] -= scroll_speeds[parallax_layer_number - 1]
@@ -260,9 +274,9 @@ my_enemies_hittable = pygame.sprite.Group()  #gruppo per fare il collision con p
 my_enemies_non_hittable = pygame.sprite.Group()
 my_dash_clouds = pygame.sprite.Group()
 
-kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (200), (window_height / 2), bullet_heart_image, my_bullets, fire_sprites, dash_sprites, my_dash_clouds, icon_sprites, player_kitty_death_sprites, player_kitty_hit_sprites, life_point_sprites) #per argomenti vedi definizione Kitty in player_kitty
+kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (200), (window_height / 2), kitty_sounds, bullet_heart_image, my_bullets, fire_sprites, dash_sprites, my_dash_clouds, icon_sprites, player_kitty_death_sprites, player_kitty_hit_sprites, life_point_sprites) #per argomenti vedi definizione Kitty in player_kitty
 
-menu_button = menu_button.Menu_button((window_width / 2, window_height / 2 - 100), menu_sprites, (my_enemies_hittable, my_sprites))
+menu_button = menu_button.Menu_button((window_width / 2, window_height / 2 - 100), menu_sprites, (my_enemies_hittable, my_sprites), kitty_sounds)
 
 minion_spawn_event = pygame.event.custom_type()
 pygame.time.set_timer(minion_spawn_event, 3500)
@@ -356,6 +370,13 @@ def render_text():
     #show_minion_health()
     show_points()
 
+def render_final_score(points_tot):
+    final_score = font_pixel.render(f"Final Score: {points_tot}", False, (250, 242, 252))
+    final_score_rect = final_score.get_rect(center = (window_width / 2, window_height / 2))
+    if (int(pygame.time.get_ticks() /500) % 2):
+        window_surface.blit(final_score, final_score_rect)
+    else:
+        window_surface.blit(final_score, (final_score_rect.x, final_score_rect.y - 50))
 
 
 execute = True
@@ -364,10 +385,10 @@ level = 0
 '''new minion, new wizard'''
 
 def new_minion():
-   minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, fireball_sprites, my_fireballs, my_enemies_non_hittable, window_width, font_pixel, window_surface)
+   minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, enemy_sounds, my_sprites, fireball_sprites, my_fireballs, my_enemies_non_hittable, window_width, font_pixel, window_surface)
 
 def new_wizard():
-     wizard_enemy.Wizard(wizard_sprites, (my_sprites, my_wizards, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, my_sprites, my_spells, spell_sprites, my_enemies_hittable, window_width, font_pixel, window_surface)
+     wizard_enemy.Wizard(wizard_sprites, (my_sprites, my_wizards, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, enemy_sounds, my_sprites, my_spells, spell_sprites, my_enemies_hittable, window_width, font_pixel, window_surface)
 
 '''levels'''
 def level1(event): #singolo minion
@@ -407,13 +428,19 @@ while execute:
     '''levels'''
     previous_frame_level = level
     if points_tot > 0 : level = 1 
-    if points_tot > 500 : level = 2 
-    if points_tot > 800 : level = 3
+    if points_tot > 100 : level = 2 
+    if points_tot > 300 : level = 3
     if points_tot > 1400 : level = 4
     if kitty.kitty_dead() : level = 777
     if level != previous_frame_level:
         black_flash.Black_flash(black_flash_sprites ,my_sprites)
-        
+        if level == 4:
+            music_lv3 = pygame.mixer.music.load(os.path.join("sfx", "music", "Space Racing_lv3.ogg"))
+            pygame.mixer.music.play(-1)
+        if level == 777:
+            music_lv777 = pygame.mixer.music.load(os.path.join("sfx", "music", "Joker Dance_lv777.ogg"))
+            pygame.mixer.music.play(-1)
+            
     if level == 0:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -457,6 +484,8 @@ while execute:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_1:
                         execute = False
+        
+
         my_sprites.empty()
         my_bullets.empty()
         my_fireballs.empty()
@@ -466,7 +495,7 @@ while execute:
         my_enemies_hittable.empty()
         my_enemies_non_hittable.empty()
         my_dash_clouds.empty()
-                
+        
     '''screen'''
     parallax_now = parallax_sprites_1 if level == 1 else parallax_sprites_2 if level < 4 else parallax_sprites_3
     draw_parallax(parallax_now)
@@ -475,8 +504,9 @@ while execute:
     my_sprites.draw(window_surface)
     draw_parallax_front_layer(parallax_now) 
     render_text()
+    if level == 777:
+        render_final_score(points_tot)
     pygame.display.update()
-    print(level)
 
 
 pygame.QUIT

@@ -1,1 +1,2 @@
-if kitty.kitty_dead() : level = 777
+
+'''levels'''

@@ -9,7 +9,7 @@ import player_kitty_hit
 import life_point
 
 class Kitty(pygame.sprite.Sprite):
-    def __init__(self, images, groups, spawn_x, spawn_y, bullet_heart_image, my_bullets, fire_images, dash_images, my_dash_clouds, icons_images, player_kitty_death_images, player_kitty_hit_images, life_point_images):
+    def __init__(self, images, groups, spawn_x, spawn_y, kitty_sounds, bullet_heart_image, my_bullets, fire_images, dash_images, my_dash_clouds, icons_images, player_kitty_death_images, player_kitty_hit_images, life_point_images):
         super().__init__(groups) #eredito da pygame.sprite.Sprite
  
         self.images = images
@@ -23,6 +23,7 @@ class Kitty(pygame.sprite.Sprite):
         self.speed = 700 
         self.health = 6
         self.groups = groups
+        self.kitty_sounds = kitty_sounds
 
         #shrink cool down
         self.can_shrink = True
@@ -70,11 +71,14 @@ class Kitty(pygame.sprite.Sprite):
         return False
     
     def get_damage(self):
+        self.kitty_sounds[0].play()  
         self.health -= 1
         self.life_points[self.health].kill()
         player_kitty_hit.Player_kitty_hit(self.player_kitty_hit_images, self.groups)
         if self.health <= 1:
             player_kitty_death.Player_kitty_death(self.player_kitty_death_images, self.groups)
+        if self.health <= 0:
+            self.kitty_sounds[1].play()
     
     def get_kitty_health(self):
         return self.health
@@ -143,6 +147,7 @@ class Kitty(pygame.sprite.Sprite):
         '''animation and definition of shrink or normal'''
         seconds_from_last_frame = int (pygame.time.get_ticks() / 120 % 4)
         if pygame.key.get_pressed()[pygame.K_p] and self.can_shrink and not self.is_shrinking_call:
+            self.kitty_sounds[3].play()
             self.is_shrinking_call = True
             self.can_shrink = False
             self.shrink_time = pygame.time.get_ticks()
@@ -185,6 +190,7 @@ class Kitty(pygame.sprite.Sprite):
     
         '''fire'''
         if pygame.key.get_pressed()[pygame.K_l] and self.can_fire and not self.is_shrinking_call:
+            self.kitty_sounds[4].play()
             fire.Fire(self.fire_images, self.rect.midright, self.groups)
             bullet_heart.Bullet_heart(self.bullet_heart_image, (self.groups, self.my_bullets), self.rect.midright)
             self.can_fire = False
@@ -193,6 +199,7 @@ class Kitty(pygame.sprite.Sprite):
         '''dash'''
         if pygame.key.get_pressed()[pygame.K_SPACE] and self.can_dash and not self.is_shrinking_call:
             dash.Dash(self.dash_images, self.groups, self.rect.center)
+            self.kitty_sounds[2].play()
             self.can_fire = False
             if pygame.key.get_pressed()[pygame.K_w]:
                 self.rect.centery -= 200
