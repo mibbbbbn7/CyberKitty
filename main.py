@@ -423,17 +423,20 @@ def level4(event): #aggiunta di secondo wizard
             new_wizard()
 
 pygame.mouse.set_visible(False)
+time_of_start = 0
 while execute:
     dt = clock.tick(60) / 1000 # DELTA TIME, 60 fps
     '''levels'''
     previous_frame_level = level
     if points_tot > 0 : level = 1 
-    if points_tot > 100 : level = 2 
-    if points_tot > 300 : level = 3
+    if points_tot > 400 : level = 2 
+    if points_tot > 800 : level = 3
     if points_tot > 1400 : level = 4
     if kitty.kitty_dead() : level = 777
     if level != previous_frame_level:
         black_flash.Black_flash(black_flash_sprites ,my_sprites)
+        if level == 1:
+            time_of_start = int(pygame.time.get_ticks() / 100)
         if level == 4:
             music_lv3 = pygame.mixer.music.load(os.path.join("sfx", "music", "Space Racing_lv3.ogg"))
             pygame.mixer.music.play(-1)
@@ -472,7 +475,7 @@ while execute:
                 level3(event)
             if level == 4:
                 level4(event)
-        points_from_time = int(time_from_start / 100)
+        points_from_time = int(time_from_start / 100) - time_of_start
         points_from_actions = kitty.get_action_points()
         points_tot = points_from_time + points_from_actions
 
