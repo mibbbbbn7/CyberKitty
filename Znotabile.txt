@@ -1,11 +1,3 @@
-QUA INSERISCO LE COSE DA APPROFONDIRE
-
--   come funziona il PARALLASSE e il TILING SYSTEM dello sfondo
--   GRUPPO sprite per il blit
--   NORMALIZZAZIONE del vettore direzione dovuta alla velocita diagonale
--   BULLET SYSTEM del caricatore
--   ANIMAZIONI  e SPRITE SHEET
-
 =======================SPRITE=======================
     
 +++++++++++++++++++ CREATI DA ME +++++++++++++++++++ 
@@ -16,6 +8,7 @@ QUA INSERISCO LE COSE DA APPROFONDIRE
         > background https://rengodev.itch.io/free-cloud-sky-parallax-background?download
         > minion https://xzany.itch.io/flying-demon-2d-pixel-art
 
-||  gli asset scaricati sono stati modificati nei colori e nella risoluione per mattenere
+||  gli asset scaricati sono stati modificati nella risoluione e/o nei colori per mantenere
 ||  una dimensione di pixel costante per tutti gli assets del gioco
 
+=======================SOUNDS=======================
