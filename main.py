@@ -401,11 +401,13 @@ time_of_start = 0
 while execute:
     dt = clock.tick(60) / 1000 # DELTA TIME, 60 fps
     '''levels'''
+    development_fast_level_change = 1
+
     previous_frame_level = level
     if points_tot > 0 : level = 1 
-    if points_tot > 400 : level = 2 
-    if points_tot > 800 : level = 3
-    if points_tot > 1400 : level = 4
+    if points_tot > 400 / development_fast_level_change : level = 2 
+    if points_tot > 800 / development_fast_level_change : level = 3
+    if points_tot > 1400 / development_fast_level_change : level = 4
     if kitty.kitty_dead() : level = 777
     if level != previous_frame_level:
         black_flash.Black_flash(black_flash_sprites ,my_sprites)
