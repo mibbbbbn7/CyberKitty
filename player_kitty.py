@@ -101,7 +101,7 @@ class Kitty(pygame.sprite.Sprite):
 
     def shrink_timer(self):
         if not self.can_shrink:
-            self.speed = 1000
+            self.speed = 900
             current_time = pygame.time.get_ticks()
             if current_time - self.shrink_time >= self.shrink_cooldown:
                 if self.is_shrinking_call : dash.Dash(self.dash_images, (self.groups, self.my_dash_clouds), self.rect.center)
@@ -159,6 +159,23 @@ class Kitty(pygame.sprite.Sprite):
             self.rect = self.image.get_frect(center = (self.rect.centerx, self.rect.centery))
             self.mask = pygame.mask.from_surface(self.image)
 
+        '''dash'''
+        if pygame.key.get_pressed()[pygame.K_SPACE] and self.can_dash and not self.is_shrinking_call:
+            dash.Dash(self.dash_images, self.groups, self.rect.center)
+            self.kitty_sounds[2].play()
+            if pygame.key.get_pressed()[pygame.K_w]:
+                self.rect.centery -= 150
+            if pygame.key.get_pressed()[pygame.K_s]:
+                self.rect.centery += 150
+            if pygame.key.get_pressed()[pygame.K_a]:
+                self.rect.centerx -= 200
+            if pygame.key.get_pressed()[pygame.K_d]:
+                self.rect.centerx += 200
+            if not pygame.key.get_pressed()[pygame.K_w] and not pygame.key.get_pressed()[pygame.K_a] and not pygame.key.get_pressed()[pygame.K_s] and not pygame.key.get_pressed()[pygame.K_d] :
+                self.rect.centerx += 200
+            self.can_dash = False
+            self.dash_time = pygame.time.get_ticks()
+            dash.Dash(self.dash_images, (self.groups, self.my_dash_clouds), self.rect.center)
         '''movement'''
         key = pygame.key.get_pressed()
             #kye[pygame.K_tasto] sono dei booleani quindi se li sommo in 
@@ -195,22 +212,6 @@ class Kitty(pygame.sprite.Sprite):
             self.can_fire = False
             self.fire_time = pygame.time.get_ticks()
         
-        '''dash'''
-        if pygame.key.get_pressed()[pygame.K_SPACE] and self.can_dash and not self.is_shrinking_call:
-            dash.Dash(self.dash_images, self.groups, self.rect.center)
-            self.kitty_sounds[2].play()
-            self.can_fire = False
-            if pygame.key.get_pressed()[pygame.K_w]:
-                self.rect.centery -= 200
-            if pygame.key.get_pressed()[pygame.K_s]:
-                self.rect.centery += 200
-            if pygame.key.get_pressed()[pygame.K_a]:
-                self.rect.centerx -= 200
-            else:
-                self.rect.centerx += 200
-            self.can_dash = False
-            self.dash_time = pygame.time.get_ticks()
-            dash.Dash(self.dash_images, (self.groups, self.my_dash_clouds), self.rect.center)
         
         self.dash_timer()
         self.shrink_timer()

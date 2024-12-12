@@ -203,7 +203,7 @@ for i in range(0, 4):
     enemy_sounds.append(enemy_sound)
 
 music_lv1 = pygame.mixer.music.load(os.path.join("sfx", "music", "City of Backstreet_lv1.ogg"))
-pygame.mixer.music.set_volume(0.6)
+pygame.mixer.music.set_volume(0.4)
 pygame.mixer.music.play(-1)
 
 '''blit di sfondo'''
@@ -248,7 +248,7 @@ my_enemies_hittable = pygame.sprite.Group()  #gruppo per fare il collision con p
 my_enemies_non_hittable = pygame.sprite.Group()
 my_dash_clouds = pygame.sprite.Group()
 
-kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (200), (window_height / 2), kitty_sounds, bullet_heart_image, my_bullets, fire_sprites, dash_sprites, my_dash_clouds, icon_sprites, player_kitty_death_sprites, player_kitty_hit_sprites, life_point_sprites) #per argomenti vedi definizione Kitty in player_kitty
+kitty = player_kitty.Kitty(kitty_sprites, my_sprites, (200), (500), kitty_sounds, bullet_heart_image, my_bullets, fire_sprites, dash_sprites, my_dash_clouds, icon_sprites, player_kitty_death_sprites, player_kitty_hit_sprites, life_point_sprites) #per argomenti vedi definizione Kitty in player_kitty
 
 menu_button = menu_button.Menu_button((window_width / 2, window_height / 2 - 100), menu_sprites, (my_enemies_hittable, my_sprites), kitty_sounds)
 
