@@ -2,6 +2,7 @@
 Cyber Kitty
 to execute this game you need to open the folder in IDE and execute main.py because relative paths are used.
 
+-  quit V
 -  move WASD
 -  shoot L
 -  shrink P
