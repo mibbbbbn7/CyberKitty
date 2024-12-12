@@ -304,7 +304,7 @@ def collisions():
 font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 40)
 
 def show_points():
-    points_text = font_pixel.render(f"pt. {points_tot}", False, (250, 242, 252))
+    points_text = font_pixel.render(f"pt. {points_tot}", False, (209, 143, 209))
     window_surface.blit(points_text, (100, 50))
 
 def show_minion_health():
@@ -317,16 +317,18 @@ def show_kitty_health():
     window_surface.blit(kitty_health, (kitty.rect.centerx - 27, kitty.rect.centery - 80))
 
 def show_general_text():
+    color = (209, 143, 209)
+    color_dark= (117, 33, 117)
     if level == 0:
-        antiKitty_txt = font_pixel.render('Cyber Kitty', False, (250, 242, 252))
+        antiKitty_txt = font_pixel.render('Cyber Kitty', False, (color))
     if level == 1:
-        antiKitty_txt = font_pixel.render('Cyber Kitty lv 1', False, (250, 242, 252)) #testo da scrivere, anti aliasing, colore
+        antiKitty_txt = font_pixel.render('Cyber Kitty lv 1', False, (color_dark)) #testo da scrivere, anti aliasing, colore
     if level == 2:
-        antiKitty_txt = font_pixel.render('Cyber Kitty lv 2', False, (250, 242, 252))
+        antiKitty_txt = font_pixel.render('Cyber Kitty lv 2', False, (color))
     if level == 3:
-        antiKitty_txt = font_pixel.render('Cyber Kitty lv 3', False, (250, 242, 252))
+        antiKitty_txt = font_pixel.render('Cyber Kitty lv 3', False, (color))
     if level == 4:
-        antiKitty_txt = font_pixel.render('Cyber Kitty lv 4', False, (250, 242, 252))
+        antiKitty_txt = font_pixel.render('Cyber Kitty lv 4', False, (color))
     if level == 777:
         antiKitty_txt = font_pixel.render('Cyber Kitty  you lost\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n         press R to reset', False, (250, 242, 252))
 
@@ -425,7 +427,7 @@ while execute:
             if event.type == pygame.QUIT:
                 execute = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
+                if event.key == pygame.K_v:
                     execute = False
         points_from_actions = kitty.get_action_points()
         points_tot = points_from_actions
@@ -439,7 +441,7 @@ while execute:
             if event.type == pygame.QUIT:
                 execute = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
+                if event.key == pygame.K_v:
                     execute = False
             if event.type == dust_from_kitty_event:
                 dust.Dust(dust_sprites, kitty.get_bottomleft(), my_sprites)
@@ -471,7 +473,7 @@ while execute:
                 if event.type == pygame.QUIT:
                     execute = False
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_1:
+                    if event.key == pygame.K_v:
                         execute = False
                     if event.key == pygame.K_r:
                         level = 0
