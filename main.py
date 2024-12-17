@@ -304,7 +304,10 @@ def collisions():
 font_pixel = pygame.font.Font(os.path.join("data", "fonts", "04B_30__.ttf"), 40)
 
 def show_points():
-    points_text = font_pixel.render(f"pt. {points_tot}", False, (209, 143, 209))
+    if level == 1:
+        points_text = font_pixel.render(f"pt. {points_tot}", False, (117, 33, 117))
+    else:
+        points_text = font_pixel.render(f"pt. {points_tot}", False, (209, 143, 209))
     window_surface.blit(points_text, (100, 50))
 
 def show_minion_health():
@@ -320,7 +323,7 @@ def show_general_text():
     color = (209, 143, 209)
     color_dark= (117, 33, 117)
     if level == 0:
-        antiKitty_txt = font_pixel.render('Cyber Kitty', False, (color))
+        antiKitty_txt = font_pixel.render('Cyber Kitty\n\n\n\n\n\n\n\n\n\n\n\n\n         press V to quit', False, (color))
     if level == 1:
         antiKitty_txt = font_pixel.render('Cyber Kitty lv 1', False, (color_dark)) #testo da scrivere, anti aliasing, colore
     if level == 2:
@@ -330,7 +333,7 @@ def show_general_text():
     if level == 4:
         antiKitty_txt = font_pixel.render('Cyber Kitty lv 4', False, (color))
     if level == 777:
-        antiKitty_txt = font_pixel.render('Cyber Kitty  you lost\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n         press R to reset', False, (250, 242, 252))
+        antiKitty_txt = font_pixel.render('Cyber Kitty  you lost\n\n\n\n\n\n\n\n\n\n\n\n\n        press R to reset\n\n         press V to quit', False, (250, 242, 252))
 
     window_surface.blit(antiKitty_txt, (100, 10))
     #number_of_bullets = len(my_bullets)
