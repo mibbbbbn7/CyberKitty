@@ -9,7 +9,7 @@ class Dust(pygame.sprite.Sprite):
         self.frame_image = 0
         self.image = self.images[0]
         self.pos = pos
-        self.rect = self.image.get_frect(bottomright = self.pos)
+        self.rect = self.image.get_rect(bottomright = self.pos)
         
         self.spawned_at_time = pygame.time.get_ticks()
         

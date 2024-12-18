@@ -12,7 +12,7 @@ class Minion(pygame.sprite.Sprite):
         self.images = images
         self.frame_image = 0
         self.image = self.images[self.frame_image]
-        self.rect = self.image.get_frect(center = (spawn_x, spawn_y))
+        self.rect = self.image.get_rect(center = (spawn_x, spawn_y))
         self.direction = pygame.Vector2(-1, 0)
         self.speed = 200
         self.spawned_at_time = pygame.time.get_ticks()
@@ -62,7 +62,6 @@ class Minion(pygame.sprite.Sprite):
             if self.image == self.images[5] and self.can_fire:
                 fireball_sound = pygame.mixer.Sound(self.enemy_sounds[2])
                 fireball_sound.play()
-                fireball_sound.set_volume(0.5)
                 fireball.Fire_ball(self.fireball_images,(self.my_sprite_blit_group, self.my_fireball_group, self.my_enemies_non_hittable), self.rect.midleft)
                 self.can_fire = False
             if self.image == self.images[7]:

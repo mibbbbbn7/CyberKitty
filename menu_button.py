@@ -7,7 +7,7 @@ class Menu_button(pygame.sprite.Sprite):
         self.frame_image = 0
         self.image = self.images[self.frame_image]
         self.pos = pos
-        self.rect = self.image.get_frect(center = self.pos)
+        self.rect = self.image.get_rect(center = self.pos)
         self.health = 5
         self.type = "menu_button"
         self.kitty_sounds = kitty_sounds

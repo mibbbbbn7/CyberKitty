@@ -11,7 +11,7 @@ class Wizard(pygame.sprite.Sprite):
         self.images = images
         self.frame_image = 0
         self.image = self.images[self.frame_image]
-        self.rect = self.image.get_frect(center = (spawn_x, spawn_y))
+        self.rect = self.image.get_rect(center = (spawn_x, spawn_y))
         self.direction = pygame.Vector2(-1, 0)
         self.speed = 300
         self.spawned_at_time = pygame.time.get_ticks()

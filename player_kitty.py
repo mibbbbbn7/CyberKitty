@@ -14,13 +14,13 @@ class Kitty(pygame.sprite.Sprite):
         self.images = images
         self.frame_image = 0
         self.image = self.images[self.frame_image]
-        self.rect = self.image.get_frect(center = (spawn_x, spawn_y))
+        self.rect = self.image.get_rect(center = (spawn_x, spawn_y))
             #le classi Sprite ereditano dal parent pygame.sprite.Sprite
             #al quale sostituisco i self.surf e self rect con la superficie 
             #e il rect del mio player(nell init infati inizializzo anche il super)
         self.direction = pygame.Vector2(0, 0)
         self.speed = 700 
-        self.health = 6
+        self.health = 8
         self.groups = groups
         self.kitty_sounds = kitty_sounds
 
@@ -152,11 +152,11 @@ class Kitty(pygame.sprite.Sprite):
             self.shrink_time = pygame.time.get_ticks()
         if self.is_shrinking_call: #animazione quando è piccolo
             self.image = self.images[seconds_from_last_frame + 4]
-            self.rect = self.image.get_frect(center = (self.rect.centerx, self.rect.centery))
+            self.rect = self.image.get_rect(center = (self.rect.centerx, self.rect.centery))
             self.mask = pygame.mask.from_surface(self.image)
         if not self.is_shrinking_call: #animazione quando è grande
             self.image = self.images[seconds_from_last_frame]
-            self.rect = self.image.get_frect(center = (self.rect.centerx, self.rect.centery))
+            self.rect = self.image.get_rect(center = (self.rect.centerx, self.rect.centery))
             self.mask = pygame.mask.from_surface(self.image)
 
         '''dash'''

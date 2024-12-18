@@ -7,7 +7,7 @@ class Fire_ball(pygame.sprite.Sprite):
         self.frame_image = 0
         self.image = self.images[self.frame_image]
         self.pos = pos
-        self.rect = self.image.get_frect(midleft = self.pos)
+        self.rect = self.image.get_rect(midleft = self.pos)
         self.rect.x += 22
         self.rect.y += 14
         self.spawned_at_time = pygame.time.get_ticks()

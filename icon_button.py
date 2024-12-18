@@ -7,7 +7,7 @@ class Icon_button(pygame.sprite.Sprite):
         self.indexx = indexx
         self.image = self.images[self.indexx]
         self.pos = pos
-        self.rect = self.image.get_frect(center = self.pos)
+        self.rect = self.image.get_rect(center = self.pos)
     
     def update(self, delta_t, window_w, window_h):
         ciao="non devo fare nulla"

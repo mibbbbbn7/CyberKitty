@@ -366,7 +366,7 @@ def new_minion():
    minion_enemy.Minion(red_minion_sprites, (my_sprites, my_minions, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, enemy_sounds, my_sprites, fireball_sprites, my_fireballs, my_enemies_non_hittable, window_width, font_pixel, window_surface)
 
 def new_wizard():
-     wizard_enemy.Wizard(wizard_sprites, (my_sprites, my_wizards, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, enemy_sounds, my_sprites, my_spells, spell_sprites, my_enemies_hittable, window_width, font_pixel, window_surface)
+    wizard_enemy.Wizard(wizard_sprites, (my_sprites, my_wizards, my_enemies_hittable), (window_width + 20), int(random.randint(150, window_height - 200)), death_sprites, enemy_sounds, my_sprites, my_spells, spell_sprites, my_enemies_hittable, window_width, font_pixel, window_surface)
 
 '''levels'''
 
@@ -406,7 +406,7 @@ time_of_start = 0
 while execute:
     dt = clock.tick(60) / 1000 # DELTA TIME, 60 fps
     '''levels'''
-    development_fast_level_change = 1
+    development_fast_level_change = 2
 
     previous_frame_level = level
     if points_tot > 0 : level = 1 

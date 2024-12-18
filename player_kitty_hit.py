@@ -9,7 +9,7 @@ class Player_kitty_hit(pygame.sprite.Sprite):
         self.windows_width = 1280
         self.windows_height = 720
         self.image = self.images[self.frame_image]
-        self.rect = self.image.get_frect(center = (self.windows_width / 2, self.windows_height / 2))
+        self.rect = self.image.get_rect(center = (self.windows_width / 2, self.windows_height / 2))
         self.spawned_at_time = pygame.time.get_ticks()
         
 
