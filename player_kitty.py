@@ -20,7 +20,7 @@ class Kitty(pygame.sprite.Sprite):
             #e il rect del mio player(nell init infati inizializzo anche il super)
         self.direction = pygame.Vector2(0, 0)
         self.speed = 700 
-        self.health = 8
+        self.health = 6
         self.groups = groups
         self.kitty_sounds = kitty_sounds
 

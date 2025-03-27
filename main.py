@@ -323,7 +323,7 @@ def show_general_text():
     color = (209, 143, 209)
     color_dark= (117, 33, 117)
     if level == 0:
-        antiKitty_txt = font_pixel.render('Cyber Kitty\n\n\n\n\n\n\n\n\n\n\n\n\n         press V to quit', False, (color))
+        antiKitty_txt = font_pixel.render('Cyber Kitty\n\n\n\n\n\n\n\n\n\n\n\n         press V to quit\n\n         press L to shoot', False, (color))
     if level == 1:
         antiKitty_txt = font_pixel.render('Cyber Kitty lv 1', False, (color_dark)) #testo da scrivere, anti aliasing, colore
     if level == 2:
@@ -406,7 +406,7 @@ time_of_start = 0
 while execute:
     dt = clock.tick(60) / 1000 # DELTA TIME, 60 fps
     '''levels'''
-    development_fast_level_change = 2
+    development_fast_level_change = 1
 
     previous_frame_level = level
     if points_tot > 0 : level = 1 
