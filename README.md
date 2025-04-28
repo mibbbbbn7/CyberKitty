@@ -32,13 +32,3 @@ I have personally drew many of the sprites for the game
 
 The rest of the assets were found as free resources that i then modified to metch the aesthetics and the general pixel ratio of the game.
 ## enjoy 
-<div align="center">
-  <img src="data/for_read_me/personal_spritesheet.png" height="400" style="image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED  */
-    image-rendering: -moz-crisp-edges;          /* Firefox                        */
-    image-rendering: -o-crisp-edges;            /* Opera                          */
-    image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
-    image-rendering: pixelated;                 /* Universal support since 2021   */
-    image-rendering: optimize-contrast;         /* CSS3 Proposed                  */
-    -ms-interpolation-mode: nearest-neighbor;   /* IE8+                           */">
-
-</div>
