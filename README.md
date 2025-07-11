@@ -12,7 +12,7 @@ Use this *keys* in the game window:
 
 **Shoot with your bullets the *"Play"* button or collide with it to start the game**
 <!-- BREAKPOINT -->
-[WATCH GAME TRAILER HERE](https://youtu.be/_P9crFPv-q0)
+[>>>>> WATCH GAME TRAILER HERE <<<<<](https://youtu.be/_P9crFPv-q0)
 <!-- BREAKPOINT -->
 ## Game
 "**Cyber Kitty**" is a 2D endless scroll python game developed with the focus on preatty visuals, frenetic gameplay, clean and optimized code.
