@@ -15,7 +15,7 @@ Use this *keys* in the game window:
 [>>>>> WATCH GAME TRAILER HERE <<<<<](https://youtu.be/_P9crFPv-q0)
 <!-- BREAKPOINT -->
 ## Game
-"**Cyber Kitty**" is a 2D endless scroll python game developed with the focus on preatty visuals, frenetic gameplay, clean and optimized code.
+"**Cyber Kitty**" is a 2D endless scroll python game developed with the focus on preatty visuals and frenetic gameplay.
 <!-- BREAKPOINT -->
 ![initial frame](data/for_read_me/readme1.png)
 <!-- BREAKPOINT -->
